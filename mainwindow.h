@@ -46,13 +46,19 @@ private slots:
 
     void on_x3_clicked(bool checked);
 
+    void on_parametric_clicked(bool checked);
+
+    void on_parametricMin_valueChanged(double arg1);
+
+    void on_parametricMax_valueChanged(double arg1);
+
 private:
     Ui::MainWindow *ui;
     QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
     QCustomPlot *plot;
     int length = 100001;
     QVector<double> x1, x2, x3, t, *key;
-    bool resizeAxis = false;
+    int axisMode = 0;
 };
 
 #endif // MAINWINDOW_H

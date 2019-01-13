@@ -84,7 +84,7 @@ void MainWindow::on_autorange_clicked(bool checked)
 {
     //Set the graph to autosize
     if(checked) {
-        resizeAxis = true;
+        axisMode = 1;
         autoSize();
     }
 }
@@ -93,7 +93,7 @@ void MainWindow::on_manualSize_clicked(bool checked)
 {
     //Set graph to manualsize
     if(checked) {
-        resizeAxis = false;
+        axisMode = 0;
         manualSize();
     }
 }
@@ -121,7 +121,7 @@ void MainWindow::on_yMax_valueChanged()
 
 void MainWindow::autoSize() {
     //If autosize button is checked change the x and y axis to include all plotted data
-    if(resizeAxis) {
+    if(axisMode == 1) {
         plot->xAxis->rescale(true);
         plot->yAxis->rescale(true);
     }
@@ -130,7 +130,7 @@ void MainWindow::autoSize() {
 
 void MainWindow::manualSize() {
     //If the manualsize button is checked set the x and y axis to the selected min/max
-    if(!resizeAxis) {
+    if(axisMode == 0) {
         ui->graph->xAxis->setRange(ui->xMin->value(), ui->xMax->value());
         ui->graph->yAxis->setRange(ui->yMin->value(), ui->yMax->value());
         ui->graph->replot();
@@ -169,4 +169,21 @@ void MainWindow::on_x3_clicked(bool checked)
 {
     x3Graph->setVisible(checked);
     ui->graph->replot();
+}
+
+void MainWindow::on_parametric_clicked(bool checked)
+{
+    if(checked) {
+        axisMode = 2;
+    }
+}
+
+void MainWindow::on_parametricMin_valueChanged(double arg1)
+{
+
+}
+
+void MainWindow::on_parametricMax_valueChanged(double arg1)
+{
+
 }
