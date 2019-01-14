@@ -52,6 +52,9 @@ private slots:
 
     void on_parametricMax_valueChanged(double arg1);
 
+    void parametricRange();
+
+    void scaleValueAxisInKey(double minKey, double maxKey, double overScale = 1.0);
 private:
     Ui::MainWindow *ui;
     QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
