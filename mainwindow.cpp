@@ -182,9 +182,7 @@ void MainWindow::on_parametric_clicked(bool checked)
 void MainWindow::parametricRange() {
     if(axisMode == 2) {
         int minIndex = -1, maxIndex = -1;
-
         for(int i=0; i<length; ++i) {
-
             if(ui->parametricMin->value() <= t[i] && minIndex < 0) {
                 minIndex = i;
             }
@@ -195,7 +193,6 @@ void MainWindow::parametricRange() {
                 break;
             }
         }
-
         if(minIndex <= -1) {
             minIndex = 0;
         }
@@ -204,54 +201,26 @@ void MainWindow::parametricRange() {
         }
         ui->graph->xAxis->setRange((*key)[minIndex], (*key)[maxIndex]);
         scaleValueAxisInKey((*key)[minIndex], (*key)[maxIndex]);
-        //double maxValue, minValue;
-        //ui->graph->replot();
-        //ui->graph->graph(0)->rescaleValueAxis(false, true);
-        //qDebug() << minIndex << " " << (*key)[minIndex] << " " << maxIndex << " " << (*key)[51000];
     }
 }
 
-void MainWindow::scaleValueAxisInKey(double minKey, double maxKey, double overScale) {
+void MainWindow::scaleValueAxisInKey(double minKey, double maxKey, double underScale, double overScale) {
     bool inRange;
     QCPRange *domain = new QCPRange(minKey, maxKey);
-    QCPRange tRange  = tGraph->getValueRange(inRange, QCP::sdBoth, *domain);
-    QCPRange x1Range = x1Graph->getValueRange(inRange, QCP::sdBoth, *domain);
-    QCPRange x2Range = x2Graph->getValueRange(inRange, QCP::sdBoth, *domain);
-    QCPRange x3Range = x3Graph->getValueRange(inRange, QCP::sdBoth, *domain);
     double minValue = DBL_MAX, maxValue = -DBL_MAX;
-    if(tGraph->visible()) {
-        if(tRange.lower < minValue) {
-            minValue = tRange.lower;
-        }
-        if(tRange.upper > maxValue) {
-            maxValue = tRange.upper;
-        }
-    }
-    if(x1Graph->visible()) {
-        if(x1Range.lower < minValue) {
-            minValue = x1Range.lower;
-        }
-        if(x1Range.upper > maxValue) {
-            maxValue = x1Range.upper;
+    QCPRange tempRange;
+    for(int i = 0; i < plot->plottableCount(); ++i) {
+        if(plot->plottable(i)->visible()) {
+            tempRange = plot->plottable(i)->getValueRange(inRange, QCP::sdBoth, *domain);
+            if(tempRange.lower < minValue) {
+                minValue = tempRange.lower;
+            }
+            if(tempRange.upper > maxValue) {
+                maxValue = tempRange.upper;
+            }
         }
     }
-    if(x2Graph->visible()) {
-        if(x2Range.lower < minValue) {
-            minValue = x2Range.lower;
-        }
-        if(x2Range.upper > maxValue) {
-            maxValue = x2Range.upper;
-        }
-    }
-    if(x3Graph->visible()) {
-        if(x3Range.lower < minValue) {
-            minValue = x3Range.lower;
-        }
-        if(x3Range.upper > maxValue) {
-            maxValue = x3Range.upper;
-        }
-    }
-    ui->graph->yAxis->setRange(minValue*overScale, maxValue*overScale);
+    ui->graph->yAxis->setRange(minValue*underScale, maxValue*overScale);
     ui->graph->replot();
 }
 
