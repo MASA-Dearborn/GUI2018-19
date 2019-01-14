@@ -48,9 +48,9 @@ private slots:
 
     void on_parametric_clicked(bool checked);
 
-    void on_parametricMin_valueChanged(double arg1);
+    void on_parametricMin_valueChanged();
 
-    void on_parametricMax_valueChanged(double arg1);
+    void on_parametricMax_valueChanged();
 
     void parametricRange();
 

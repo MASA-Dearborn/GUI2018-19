@@ -40,10 +40,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->yMin->setRange(-DBL_MAX, DBL_MAX);
     ui->xMax->setRange(-DBL_MAX, DBL_MAX);
     ui->yMax->setRange(-DBL_MAX, DBL_MAX);
+    ui->parametricMin->setRange(-DBL_MAX, DBL_MAX);
+    ui->parametricMax->setRange(-DBL_MAX, DBL_MAX);
     ui->xMin->setValue(-1.0);
     ui->yMin->setValue(-1.0);
     ui->xMax->setValue(1.0);
     ui->yMax->setValue(1.0);
+    ui->parametricMin->setValue(-1.0);
+    ui->parametricMax->setValue(1.0);
     //Finish setting up plots and graph them
     updateGraph();
 }
@@ -150,25 +154,29 @@ void MainWindow::updateGraph() {
 void MainWindow::on_t_clicked(bool checked)
 {
     tGraph->setVisible(checked);
-    ui->graph->replot();
+    autoSize();
+    parametricRange();
 }
 
 void MainWindow::on_x1_clicked(bool checked)
 {
     x1Graph->setVisible(checked);
-    ui->graph->replot();
+    autoSize();
+    parametricRange();
 }
 
 void MainWindow::on_x2_clicked(bool checked)
 {
     x2Graph->setVisible(checked);
-    ui->graph->replot();
+    autoSize();
+    parametricRange();
 }
 
 void MainWindow::on_x3_clicked(bool checked)
 {
     x3Graph->setVisible(checked);
-    ui->graph->replot();
+    autoSize();
+    parametricRange();
 }
 
 void MainWindow::on_parametric_clicked(bool checked)
@@ -224,12 +232,12 @@ void MainWindow::scaleValueAxisInKey(double minKey, double maxKey, double underS
     ui->graph->replot();
 }
 
-void MainWindow::on_parametricMin_valueChanged(double arg1)
+void MainWindow::on_parametricMin_valueChanged()
 {
-
+    parametricRange();
 }
 
-void MainWindow::on_parametricMax_valueChanged(double arg1)
+void MainWindow::on_parametricMax_valueChanged()
 {
-
+    parametricRange();
 }
