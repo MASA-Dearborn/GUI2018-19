@@ -45,6 +45,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->xMax->setValue(1.0);
     ui->yMax->setValue(1.0);
     //Finish setting up plots and graph them
+    tGraph->setPen(QPen(Qt::blue));
+    x1Graph->setPen(QPen(Qt::red));
+    x2Graph->setPen(QPen(Qt::green));
+    x3Graph->setPen(QPen(Qt::black));
+    tGraph->setName("t");
+    x1Graph->setName("x1");
+    x2Graph->setName("x2");
+    x3Graph->setName("x3");
+    plot->legend->setIconSize(10,10);
+    plot->legend->setVisible(true);
     updateGraph();
 }
 
