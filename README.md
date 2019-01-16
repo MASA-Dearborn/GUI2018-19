@@ -10,9 +10,8 @@
 - Graph data parametrically
 - Manually and automatically resize graph to fit data
 #### Unfinished Features
-- N/A
-#### Planned Features
 - Graph data based on time instead of domain
+#### Planned Features
 - Real time data processing and graphing
 - Graph the last x seconds of data
 
