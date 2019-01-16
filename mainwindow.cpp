@@ -40,10 +40,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->yMin->setRange(-DBL_MAX, DBL_MAX);
     ui->xMax->setRange(-DBL_MAX, DBL_MAX);
     ui->yMax->setRange(-DBL_MAX, DBL_MAX);
+    ui->parametricMin->setRange(-DBL_MAX, DBL_MAX);
+    ui->parametricMax->setRange(-DBL_MAX, DBL_MAX);
     ui->xMin->setValue(-1.0);
     ui->yMin->setValue(-1.0);
     ui->xMax->setValue(1.0);
     ui->yMax->setValue(1.0);
+    ui->parametricMin->setValue(-1.0);
+    ui->parametricMax->setValue(1.0);
     //Finish setting up plots and graph them
     tGraph->setPen(QPen(Qt::blue));
     x1Graph->setPen(QPen(Qt::red));
@@ -58,13 +62,11 @@ MainWindow::MainWindow(QWidget *parent) :
     updateGraph();
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_horizontalAxis_activated(int index)
-{
+void MainWindow::on_horizontalAxis_activated(int index) {
     //Check which option was selected and set the x axis accordingly
     switch (index) {
     case 0 :
@@ -90,48 +92,50 @@ void MainWindow::on_horizontalAxis_activated(int index)
     updateGraph();
 }
 
-void MainWindow::on_autorange_clicked(bool checked)
-{
+void MainWindow::on_autorange_clicked(bool checked) {
     //Set the graph to autosize
     if(checked) {
-        resizeAxis = true;
+        axisMode = 1;
         autoSize();
     }
 }
 
-void MainWindow::on_manualSize_clicked(bool checked)
-{
+void MainWindow::on_manualSize_clicked(bool checked) {
     //Set graph to manualsize
     if(checked) {
-        resizeAxis = false;
+        axisMode = 0;
         manualSize();
     }
 }
 
 //Call manualsize whenever the manual domain/range is changed
-void MainWindow::on_xMin_valueChanged()
-{
+void MainWindow::on_xMin_valueChanged() {
     manualSize();
 }
 
-void MainWindow::on_yMin_valueChanged()
-{
+void MainWindow::on_yMin_valueChanged() {
     manualSize();
 }
 
-void MainWindow::on_xMax_valueChanged()
-{
+void MainWindow::on_xMax_valueChanged() {
     manualSize();
 }
 
-void MainWindow::on_yMax_valueChanged()
-{
+void MainWindow::on_yMax_valueChanged() {
     manualSize();
+}
+
+void MainWindow::on_parametric_clicked(bool checked) {
+    //If parametric button is checked change the x and y axis to include all plotted data in the given t range
+    if(checked) {
+        axisMode = 2;
+        parametricRange();
+    }
 }
 
 void MainWindow::autoSize() {
     //If autosize button is checked change the x and y axis to include all plotted data
-    if(resizeAxis) {
+    if(axisMode == 1) {
         plot->xAxis->rescale(true);
         plot->yAxis->rescale(true);
     }
@@ -140,7 +144,7 @@ void MainWindow::autoSize() {
 
 void MainWindow::manualSize() {
     //If the manualsize button is checked set the x and y axis to the selected min/max
-    if(!resizeAxis) {
+    if(axisMode == 0) {
         ui->graph->xAxis->setRange(ui->xMin->value(), ui->xMax->value());
         ui->graph->yAxis->setRange(ui->yMin->value(), ui->yMax->value());
         ui->graph->replot();
@@ -148,35 +152,94 @@ void MainWindow::manualSize() {
 }
 
 void MainWindow::updateGraph() {
-    //Update each graph to the new key, and call autosize in case the domain or range changed
+    //Update each graph to the new key, and call autosize/parametricRange in case the domain or range changed
     x1Graph->setData(t, *key, x1, true);
     x2Graph->setData(t, *key, x2, true);
     x3Graph->setData(t, *key, x3, true);
     tGraph->setData(t, *key, t, true);
+    parametricRange();
     autoSize();
 }
 
 //Set each graph as either visible or hidden based on checkbox
-void MainWindow::on_t_clicked(bool checked)
-{
+void MainWindow::on_t_clicked(bool checked) {
     tGraph->setVisible(checked);
-    ui->graph->replot();
+    autoSize();
+    parametricRange();
 }
 
-void MainWindow::on_x1_clicked(bool checked)
-{
+void MainWindow::on_x1_clicked(bool checked) {
     x1Graph->setVisible(checked);
-    ui->graph->replot();
+    autoSize();
+    parametricRange();
 }
 
-void MainWindow::on_x2_clicked(bool checked)
-{
+void MainWindow::on_x2_clicked(bool checked) {
     x2Graph->setVisible(checked);
+    autoSize();
+    parametricRange();
+}
+
+void MainWindow::on_x3_clicked(bool checked) {
+    x3Graph->setVisible(checked);
+    autoSize();
+    parametricRange();
+}
+
+void MainWindow::parametricRange() {
+    if(axisMode == 2) {
+        int minIndex = -1, maxIndex = -1; //Initialize the min/max indicies out of bounds to simplify code in for loop
+        //Determine the index in which our parameter (t) is as close to the t value entered by the user
+        for(int i=0; i<length; ++i) {
+            if(ui->parametricMin->value() <= t[i] && minIndex < 0) {
+                minIndex = i;
+            }
+            if(ui->parametricMax->value() <= t[i] && maxIndex < 0) {
+                maxIndex = i;
+            }
+            //If the min and max indicies are both found break loop
+            if(minIndex >= 0 && maxIndex >= 0) {
+                break;
+            }
+        }
+        //If either the min/max indicies provided cannot be found initialize the indicies to the first or last possible value respectively
+        if(minIndex <= -1) {
+            minIndex = 0;
+        }
+        if(maxIndex <= -1) {
+            maxIndex = length - 1;
+        }
+        //Change domain to match the found limits, and then autosize the range appropriately
+        ui->graph->xAxis->setRange((*key)[minIndex], (*key)[maxIndex]);
+        scaleValueAxisInKey((*key)[minIndex], (*key)[maxIndex]);
+    }
+}
+
+void MainWindow::scaleValueAxisInKey(double minKey, double maxKey, double underScale, double overScale) {
+    bool inRange; //Provided to the getValueRange function to report back if there was a result in the provided range; should be unnecessary to use but required as an input
+    QCPRange *domain = new QCPRange(minKey, maxKey); //Create new range corresponding to the selected domain
+    double minValue = DBL_MAX, maxValue = -DBL_MAX; //Initialize the upper/lower bounds to their most extreme counterparts to ensure that the range is in the dataset
+    QCPRange tempRange;
+    //Iterate over all plots and get their min/max values to determine the absolute min/max of the domain
+    for(int i = 0; i < plot->plottableCount(); ++i) {
+        if(plot->plottable(i)->visible()) {
+            tempRange = plot->plottable(i)->getValueRange(inRange, QCP::sdBoth, *domain); //Create new range corresponding to the range of the selected graph
+            if(tempRange.lower < minValue) {
+                minValue = tempRange.lower;
+            }
+            if(tempRange.upper > maxValue) {
+                maxValue = tempRange.upper;
+            }
+        }
+    }
+    ui->graph->yAxis->setRange(minValue*underScale, maxValue*overScale); //Set the newly found range, adjusting for any extra space above or below
     ui->graph->replot();
 }
 
-void MainWindow::on_x3_clicked(bool checked)
-{
-    x3Graph->setVisible(checked);
-    ui->graph->replot();
+void MainWindow::on_parametricMin_valueChanged() {
+    parametricRange();
+}
+
+void MainWindow::on_parametricMax_valueChanged() {
+    parametricRange();
 }

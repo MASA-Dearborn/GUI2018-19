@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>354</height>
+    <width>398</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,7 +100,7 @@
       <x>170</x>
       <y>270</y>
       <width>211</width>
-      <height>31</height>
+      <height>61</height>
      </rect>
     </property>
     <property name="title">
@@ -133,6 +133,22 @@
      </property>
      <property name="checked">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="parametric">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>82</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Parametric</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -200,13 +216,33 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QDoubleSpinBox" name="parametricMin">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>280</y>
+      <width>62</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="parametricMax">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>280</y>
+      <width>62</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>397</width>
+     <width>398</width>
      <height>21</height>
     </rect>
    </property>
