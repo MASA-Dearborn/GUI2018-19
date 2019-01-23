@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     key = &t;
     //Give the axes some labels
     ui->graph->xAxis->setLabel("t");
-    ui->graph->yAxis->setLabel("x1");
+    //ui->graph->yAxis->setLabel("x1");
     //Set axes ranges and min/max available range
     ui->graph->xAxis->setRange(-1, 1);
     ui->graph->yAxis->setRange(-1, 1);
@@ -58,23 +58,15 @@ MainWindow::MainWindow(QWidget *parent) :
     x1Graph->setName("x1");
     x2Graph->setName("x2");
     x3Graph->setName("x3");
-    //plot->legend->setIconSize(10,10);
-    /*
+    //Place legend along bottom of the plot instead of in the corner
     QCPLayoutGrid *subLayout = new QCPLayoutGrid;
-    plot->plotLayout()->addElement(0, 1, subLayout);
-    subLayout->addElement(0, 0, new QCPLayoutElement);
-    subLayout->addElement(1, 0, plot->legend);
-    subLayout->addElement(2, 0, new QCPLayoutElement);
-    plot->plotLayout()->setColumnStretchFactor(1, 0.001);
-    */
-    QCPLayoutGrid *subLayout = new QCPLayoutGrid;
-      plot->plotLayout()->addElement(1, 0, subLayout);
-      subLayout->setMargins(QMargins(5, 0, 5, 5));
-      subLayout->addElement(0, 0, plot->legend);
-      // change the fill order of the legend, so it's filled left to right in columns:
-      plot->legend->setFillOrder(QCPLegend::foColumnsFirst);
-      // set legend's row stretch factor very small so it ends up with minimum height:
-      plot->plotLayout()->setRowStretchFactor(1, 0.001);
+    plot->plotLayout()->addElement(1, 0, subLayout);
+    subLayout->setMargins(QMargins(5, 0, 5, 5));
+    subLayout->addElement(0, 0, plot->legend);
+    //Change the fill order of the legend, so it's filled left to right in columns
+    plot->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    //Set legend's row stretch factor very small so it ends up with minimum height
+    plot->plotLayout()->setRowStretchFactor(1, 0.001);
     plot->legend->setVisible(true);
     updateGraph();
 }
