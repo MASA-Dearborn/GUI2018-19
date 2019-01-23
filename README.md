@@ -10,11 +10,13 @@
 - Graph data parametrically
 - Manually and automatically resize graph to fit data
 - Graph data based on time instead of domain
+- Color code plots and add legend
 #### Unfinished Features
-- Color code plots and add key to tell which is which
-#### Planned Features
-- Real time data processing and graphing
 - Graph the last x seconds of data
+#### Planned Features
+- Real time data processing
+- Include secondary graphs to permanently display important information
+- Throw display information to secondary application for display on multiple devices
 
 ## Installation
 1. [Download Qt](https://www.qt.io/download-qt-installer?hsCtaTracking=9f6a2170-a938-42df-a8e2-a9f0b1d6cdce%7C6cb0de4f-9bb5-4778-ab02-bfb62735f3e5)
