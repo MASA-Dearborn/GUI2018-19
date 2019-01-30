@@ -57,6 +57,8 @@ private slots:
     void scaleValueAxisInKey(double minKey, double maxKey, double underScale = 1.0, double overScale = 1.0);
 
     void updateGraphVectorSize();
+
+    void expandGraph();
 private:
     Ui::MainWindow *ui;
     QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
@@ -64,7 +66,7 @@ private:
     long int length = 100001;
     QVector<double> x1, x2, x3, t, *key;
     int axisMode = 0;
-    long int graphEntries = length;
+    long int graphEntries = 0;
 };
 
 #endif // MAINWINDOW_H

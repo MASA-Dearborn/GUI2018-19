@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
       x1[i] = t[i]*t[i];
       x2[i] = -2*t[i]*t[i] + 5*t[i] + 3;
       x3[i] = exp(t[i]);
+      graphEntries++;
     }
     //Set the x axis (key) to a dataset
     key = &t;
@@ -258,4 +259,15 @@ void MainWindow::updateGraphVectorSize() {
     x1.resize(2*t.length());
     x2.resize(2*t.length());
     x3.resize(2*t.length());
+}
+
+void MainWindow::expandGraph() {
+    if(t.length()*0.75 < graphEntries) {
+        updateGraphVectorSize();
+    }
+    graphEntries++;
+    t[graphEntries]  = (graphEntries - length/2)/100.0;
+    x1[graphEntries] = t[graphEntries]*t[graphEntries];
+    x2[graphEntries] = -2*t[graphEntries]*t[graphEntries] + 5*t[graphEntries] + 3;
+    x3[graphEntries] = exp(t[graphEntries]);
 }
