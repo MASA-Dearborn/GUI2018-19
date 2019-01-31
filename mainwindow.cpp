@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //radio = new dataProcessing();
+    connect(&radio, &dataProcessing::updateGraphData, this, &MainWindow::updateData);
+    radio.updateGraphData();
     t.resize(length);
     x1.resize(length);
     x2.resize(length);
@@ -270,4 +273,8 @@ void MainWindow::expandGraph() {
     x1[graphEntries] = t[graphEntries]*t[graphEntries];
     x2[graphEntries] = -2*t[graphEntries]*t[graphEntries] + 5*t[graphEntries] + 3;
     x3[graphEntries] = exp(t[graphEntries]);
+}
+
+void MainWindow::updateData() {
+    qDebug() << "slot working";
 }

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "qcustomplot.h"
+#include "dataprocessing.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,6 +16,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+public slots:
+    void updateData();
 
 private slots:
 
@@ -67,6 +70,7 @@ private:
     QVector<double> x1, x2, x3, t, *key;
     int axisMode = 0;
     long int graphEntries = 0;
+    dataProcessing radio;
 };
 
 #endif // MAINWINDOW_H
