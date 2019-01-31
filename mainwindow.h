@@ -70,7 +70,7 @@ private:
     QVector<double> x1, x2, x3, t, *key;
     int axisMode = 0;
     long int graphEntries = 0;
-    dataProcessing radio;
+    DataProcessing radio;
 };
 
 #endif // MAINWINDOW_H

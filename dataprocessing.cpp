@@ -4,7 +4,7 @@
 #include <QThread>
 
 
-dataProcessing::dataProcessing()
+DataProcessing::DataProcessing()
 {
     //qDebug() << "Number of serial ports:" << QSerialPortInfo::availablePorts().count();
     /*
@@ -19,4 +19,4 @@ dataProcessing::dataProcessing()
     */
     updateGraphData();
 }
-//void dataProcessing::updateGraphData() {}
+//void DataProcessing::updateGraphData() {}

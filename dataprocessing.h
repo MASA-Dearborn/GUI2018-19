@@ -1,16 +1,16 @@
-#ifndef DATAPROCESSING_H
-#define DATAPROCESSING_H
+#ifndef DataProcessing_H
+#define DataProcessing_H
 
 #include "qcustomplot.h"
 #include <QSerialPort>
 #include <QSerialPortInfo>
 
-class dataProcessing : public QObject
+class DataProcessing : public QObject
 {
     Q_OBJECT
 
 public:
-    dataProcessing();
+    DataProcessing();
 
 signals:
     void updateGraphData();
@@ -21,4 +21,4 @@ private:
 
 };
 
-#endif // DATAPROCESSING_H
+#endif // DataProcessing_H

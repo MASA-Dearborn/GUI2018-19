@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //radio = new dataProcessing();
-    connect(&radio, &dataProcessing::updateGraphData, this, &MainWindow::updateData);
+    //radio = new DataProcessing();
+    connect(&radio, &DataProcessing::updateGraphData, this, &MainWindow::updateData);
     radio.updateGraphData();
     t.resize(length);
     x1.resize(length);
