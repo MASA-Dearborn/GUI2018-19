@@ -12,6 +12,9 @@ class DataProcessing : public QObject
 public:
     DataProcessing();
 
+public slots:
+    void readData();
+
 signals:
     void updateGraphData();
 

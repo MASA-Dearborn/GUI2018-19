@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //radio = new DataProcessing();
-    connect(&radio, &DataProcessing::updateGraphData, this, &MainWindow::updateData);
-    radio.updateGraphData();
+    connect(&radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);
+    radioProcesser.updateGraphData();
     t.resize(length);
     x1.resize(length);
     x2.resize(length);
