@@ -29,19 +29,27 @@ void DataProcessing::readData() {
     //        accelerationX, accelerationY, accelerationZ, latitude, longitude, seconds;
     short minutes, hours;
     double data[15];
-    if(radioData.length() <= 122) {
+    bufferedData.append(radioData);
+    qDebug() << bufferedData.length();
+    if(bufferedData.length() == 122) {
         union { char b[8]; double d; };
-        for(int i = 0; i < radioData.length()/8; ++i) {
-            b[0] = radioData.at(7 + 8*i);
-            b[1] = radioData.at(6 + 8*i);
-            b[2] = radioData.at(5 + 8*i);
-            b[3] = radioData.at(4 + 8*i);
-            b[4] = radioData.at(3 + 8*i);
-            b[5] = radioData.at(2 + 8*i);
-            b[6] = radioData.at(1 + 8*i);
-            b[7] = radioData.at(0 + 8*i);
+        for(int i = 0; i < bufferedData.length()/8; ++i) {
+            b[0] = bufferedData.at(7 + 8*i);
+            b[1] = bufferedData.at(6 + 8*i);
+            b[2] = bufferedData.at(5 + 8*i);
+            b[3] = bufferedData.at(4 + 8*i);
+            b[4] = bufferedData.at(3 + 8*i);
+            b[5] = bufferedData.at(2 + 8*i);
+            b[6] = bufferedData.at(1 + 8*i);
+            b[7] = bufferedData.at(0 + 8*i);
+            //qDebug() << b;
             data[i] = d;
         }
+        union { char a; short n; };
+        a = bufferedData.at(120);
+        minutes = n;
+        a = bufferedData.at(121);
+        hours = n;
         /*
         altitude      = radioData.mid(0,8).toDouble();
         pressure      = radioData.mid(8,8).toDouble();
@@ -65,6 +73,9 @@ void DataProcessing::readData() {
         for( int i = 0; i < 15; i++) {
             qDebug() << data[i];
         }
+        qDebug() << minutes;
+        qDebug() << hours;
+        bufferedData.clear();
         //qDebug() << data;
     }
     updateGraphData();

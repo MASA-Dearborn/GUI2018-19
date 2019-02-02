@@ -21,7 +21,7 @@ signals:
 private:
     QSerialPortInfo radioInfo;
     QSerialPort radio;
-
+    QByteArray bufferedData;
 };
 
 #endif // DataProcessing_H
