@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     //radio = new DataProcessing();
     connect(&radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);
-    radioProcesser.updateGraphData();
+    //radioProcesser.updateGraphData();
     t.resize(length);
     x1.resize(length);
     x2.resize(length);
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     x2Graph = new QCPCurve(plot->xAxis, plot->yAxis);
     x3Graph = new QCPCurve(plot->xAxis, plot->yAxis);
     //Generate some data
+    /*
     for (int i=0; i<length; ++i)
     {
       t[i]  = (i - length/2)/100.0;
@@ -32,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
       x3[i] = exp(t[i]);
       graphEntries++;
     }
+    */
     //Set the x axis (key) to a dataset
     key = &t;
     //Give the axes some labels
@@ -269,12 +271,31 @@ void MainWindow::expandGraph() {
         updateGraphVectorSize();
     }
     graphEntries++;
-    t[graphEntries]  = (graphEntries - length/2)/100.0;
+    t[graphEntries]  = (graphEntries - 1000/2)/100.0;
     x1[graphEntries] = t[graphEntries]*t[graphEntries];
     x2[graphEntries] = -2*t[graphEntries]*t[graphEntries] + 5*t[graphEntries] + 3;
     x3[graphEntries] = exp(t[graphEntries]);
 }
 
-void MainWindow::updateData() {
-    qDebug() << "slot working";
+void MainWindow::updateData(double data[15], short minutes, short hours) {
+    qDebug() << data[0];
+    qDebug() << data[1];
+    qDebug() << data[2];
+    qDebug() << data[3];
+    t[graphEntries]  = data[0];
+    x1[graphEntries] = data[1];
+    x2[graphEntries] = data[2];
+    x3[graphEntries] = data[3];
+    qDebug() << t[graphEntries];
+    qDebug() << x1[graphEntries];
+    qDebug() << x2[graphEntries];
+    qDebug() << x3[graphEntries];
+    //qDebug() << t[graphEntries];
+    updateGraph();
+    parametricRange();
+    autoSize();
+    ++graphEntries;
+    if(t.length()*0.75 < graphEntries) {
+        updateGraphVectorSize();
+    }
 }

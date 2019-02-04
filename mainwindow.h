@@ -17,7 +17,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 public slots:
-    void updateData();
+    void updateData(double data[15], short minutes, short hours);
 
 private slots:
 
@@ -66,7 +66,7 @@ private:
     Ui::MainWindow *ui;
     QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
     QCustomPlot *plot;
-    long int length = 100001;
+    long int length = 100;
     QVector<double> x1, x2, x3, t, *key;
     int axisMode = 0;
     long int graphEntries = 0;

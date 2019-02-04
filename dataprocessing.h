@@ -16,7 +16,7 @@ public slots:
     void readData();
 
 signals:
-    void updateGraphData();
+    void updateGraphData(double data[15], short minutes, short hours);
 
 private:
     QSerialPortInfo radioInfo;

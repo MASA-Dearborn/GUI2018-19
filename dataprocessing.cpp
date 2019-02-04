@@ -17,10 +17,10 @@ DataProcessing::DataProcessing()
         radio.setPort(info);
     }
     radioInfo = QSerialPortInfo(radio);
+    radio.setBaudRate(QSerialPort::Baud115200);
     qDebug() << radioInfo.portName();
     radio.open(QSerialPort::ReadOnly);
     connect(&radio,&QSerialPort::readyRead,this,&DataProcessing::readData);
-    updateGraphData();
 }
 //void DataProcessing::updateGraphData() {}
 void DataProcessing::readData() {
@@ -28,12 +28,24 @@ void DataProcessing::readData() {
     //double altitude, pressure, humidity, teslaX, teslaY, teslaZ, gyroX, gyroY, gyroZ,
     //        accelerationX, accelerationY, accelerationZ, latitude, longitude, seconds;
     short minutes, hours;
-    double data[15];
+    double data[15] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     bufferedData.append(radioData);
-    qDebug() << bufferedData.length();
-    if(bufferedData.length() == 122) {
-        union { char b[8]; double d; };
-        for(int i = 0; i < bufferedData.length()/8; ++i) {
+    //qDebug() << bufferedData.length();
+    if(bufferedData.length() >= 122) {
+        qDebug() << "working";
+        union { char b[8]; float d;};
+        for(int i = 0; i < 4; i++) {
+            b[3] = bufferedData.at(3 + 4*i);
+            b[2] = bufferedData.at(2 + 4*i);
+            b[1] = bufferedData.at(1 + 4*i);
+            b[0] = bufferedData.at(0 + 4*i);
+            data[i] = d;
+            //qDebug() << d;
+        }
+        /*
+        union { char b[8]; double d;};
+
+        for(int i = 0; i < 15; ++i) {
             b[0] = bufferedData.at(7 + 8*i);
             b[1] = bufferedData.at(6 + 8*i);
             b[2] = bufferedData.at(5 + 8*i);
@@ -42,9 +54,9 @@ void DataProcessing::readData() {
             b[5] = bufferedData.at(2 + 8*i);
             b[6] = bufferedData.at(1 + 8*i);
             b[7] = bufferedData.at(0 + 8*i);
-            //qDebug() << b;
-            data[i] = d;
+            qDebug() << d;
         }
+        */
         union { char a; short n; };
         a = bufferedData.at(120);
         minutes = n;
@@ -70,13 +82,12 @@ void DataProcessing::readData() {
         hours         = radioData.mid(121,1).toShort();
         //qDebug() << altitude;
         */
-        for( int i = 0; i < 15; i++) {
-            qDebug() << data[i];
-        }
-        qDebug() << minutes;
-        qDebug() << hours;
-        bufferedData.clear();
+        //qDebug() << bufferedData.length();
+        bufferedData.remove(0,122);
+        //qDebug() << bufferedData.length();
         //qDebug() << data;
+        updateGraphData(data, minutes, hours);
+        //Sleep(10);
     }
-    updateGraphData();
+
 }
