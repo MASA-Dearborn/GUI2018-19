@@ -11,10 +11,11 @@
 - Manually and automatically resize graph to fit data
 - Graph data based on time instead of domain
 - Color code plots and add legend
+- Real time data processing
 #### Unfinished Features
 - Graph the last x seconds of data
+- Multithreaded data processing
 #### Planned Features
-- Real time data processing
 - Include secondary graphs to permanently display important information
 - Throw display information to secondary application for display on multiple devices
 
