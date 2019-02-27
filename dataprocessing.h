@@ -16,11 +16,11 @@ public slots:
     void readData();
 
 signals:
-    void updateGraphData(double data[15], short minutes, short hours);
+    void updateGraphData(QList<double>* data, short minutes, short hours);
 
 private:
     QSerialPortInfo radioInfo;
-    QSerialPort radio;
+    QSerialPort *radio = new QSerialPort();
     QByteArray bufferedData;
 };
 

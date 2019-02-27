@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <QTextStream>
 #include "dataprocessing.h"
+#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,7 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     //radio = new DataProcessing();
-    connect(&radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);
+    radioProcesser->moveToThread(radioThread);
+    connect(radioThread, &QThread::finished, radioProcesser, &QObject::deleteLater);
+    connect(radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);//, Qt::BlockingQueuedConnection);
+    radioThread->start();
     //radioProcesser.updateGraphData();
     t.resize(length);
     x1.resize(length);
@@ -78,6 +82,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
+    radioThread->exit();
+    radioThread->wait();
     delete ui;
 }
 
@@ -277,21 +283,31 @@ void MainWindow::expandGraph() {
     x3[graphEntries] = exp(t[graphEntries]);
 }
 
-void MainWindow::updateData(double data[15], short minutes, short hours) {
-    qDebug() << data[0];
-    qDebug() << data[1];
-    qDebug() << data[2];
-    qDebug() << data[3];
-    t[graphEntries]  = data[0];
-    x1[graphEntries] = data[1];
-    x2[graphEntries] = data[2];
-    x3[graphEntries] = data[3];
-    qDebug() << t[graphEntries];
-    qDebug() << x1[graphEntries];
-    qDebug() << x2[graphEntries];
-    qDebug() << x3[graphEntries];
+void MainWindow::updateData(QList<double>* data, short minutes, short hours) {
+    //qDebug() << data[0];
+    //qDebug() << data[1];
+    //qDebug() << data[2];
+    //qDebug() << data[3];
+    qDebug() << "definitely working";
+
+    t[graphEntries]  = (*data)[0];
+    x1[graphEntries] = (*data)[1];
+    x2[graphEntries] = (*data)[2];
+    x3[graphEntries] = (*data)[3];
+
+    free(data);
     //qDebug() << t[graphEntries];
-    updateGraph();
+    //qDebug() << x1[graphEntries];
+    //qDebug() << x2[graphEntries];
+    //qDebug() << x3[graphEntries];
+    //qDebug() << t[graphEntries];
+    //updateGraph();
+
+    tGraph->addData((*key)[graphEntries], t[graphEntries]);
+    x1Graph->addData((*key)[graphEntries], x1[graphEntries]);
+    x2Graph->addData((*key)[graphEntries], x2[graphEntries]);
+    x3Graph->addData((*key)[graphEntries], x3[graphEntries]);
+
     parametricRange();
     autoSize();
     ++graphEntries;

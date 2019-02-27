@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "qcustomplot.h"
 #include "dataprocessing.h"
+#include <QThread>
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 public slots:
-    void updateData(double data[15], short minutes, short hours);
+    void updateData(QList<double>* data, short minutes, short hours);
 
 private slots:
 
@@ -70,7 +71,8 @@ private:
     QVector<double> x1, x2, x3, t, *key;
     int axisMode = 0;
     long int graphEntries = 0;
-    DataProcessing radioProcesser;
+    DataProcessing *radioProcesser = new DataProcessing();
+    QThread *radioThread = new QThread();
 };
 
 #endif // MAINWINDOW_H

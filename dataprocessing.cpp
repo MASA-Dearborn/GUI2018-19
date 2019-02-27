@@ -2,6 +2,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QThread>
+#include <QMetaType>
 
 
 DataProcessing::DataProcessing()
@@ -14,34 +15,39 @@ DataProcessing::DataProcessing()
         qDebug()<<"Manufactures: "<<info.manufacturer();
         qDebug()<<info.vendorIdentifier();
         qDebug()<<info.productIdentifier();
-        radio.setPort(info);
+        radio->setPort(info);
     }
-    radioInfo = QSerialPortInfo(radio);
-    radio.setBaudRate(QSerialPort::Baud115200);
+    radioInfo = QSerialPortInfo(*radio);
+    radio->setBaudRate(QSerialPort::Baud115200);
     qDebug() << radioInfo.portName();
-    radio.open(QSerialPort::ReadOnly);
-    connect(&radio,&QSerialPort::readyRead,this,&DataProcessing::readData);
+    radio->open(QSerialPort::ReadOnly);
+    connect(radio,&QSerialPort::readyRead,this,&DataProcessing::readData);
 }
 //void DataProcessing::updateGraphData() {}
 void DataProcessing::readData() {
-    QByteArray radioData = radio.readAll();
+    QByteArray radioData = radio->readAll();
     //double altitude, pressure, humidity, teslaX, teslaY, teslaZ, gyroX, gyroY, gyroZ,
     //        accelerationX, accelerationY, accelerationZ, latitude, longitude, seconds;
     short minutes, hours;
-    double data[15] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    //double *data = (double*) malloc(15*sizeof(double));
+    //QList<double> data;// = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     bufferedData.append(radioData);
     //qDebug() << bufferedData.length();
     if(bufferedData.length() >= 122) {
-        qDebug() << "working";
-        union { char b[8]; float d;};
+        qDebug() << bufferedData.length();
+        QList<double>* data = new QList<double>;
+        //qDebug() << "working";
+        ///*
+        union { char b[4]; float d;};
         for(int i = 0; i < 4; i++) {
             b[3] = bufferedData.at(3 + 4*i);
             b[2] = bufferedData.at(2 + 4*i);
             b[1] = bufferedData.at(1 + 4*i);
             b[0] = bufferedData.at(0 + 4*i);
-            data[i] = d;
+            data->append(d);
             //qDebug() << d;
         }
+        //*/
         /*
         union { char b[8]; double d;};
 
@@ -86,7 +92,12 @@ void DataProcessing::readData() {
         bufferedData.remove(0,122);
         //qDebug() << bufferedData.length();
         //qDebug() << data;
-        updateGraphData(data, minutes, hours);
+        //qDebug() << "working";
+        emit updateGraphData(data, minutes, hours);
+        //emit testConnection();
+        //qApp->processEvents();
+        //QCoreApplication::processEvents();
+        //qDebug() << QThread::currentThread()->eventDispatcher()->processEvents(QEventLoop::AllEvents);
         //Sleep(10);
     }
 
