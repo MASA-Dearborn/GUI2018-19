@@ -1,12 +1,27 @@
-#ifndef DATAPROCESSING_H
-#define DATAPROCESSING_H
+#ifndef DataProcessing_H
+#define DataProcessing_H
 
 #include "qcustomplot.h"
+#include <QSerialPort>
+#include <QSerialPortInfo>
 
-class dataProcessing
+class DataProcessing : public QObject
 {
+    Q_OBJECT
+
 public:
-    dataProcessing();
+    DataProcessing();
+
+public slots:
+    void readData();
+
+signals:
+    void updateGraphData(QList<double>* data, short minutes, short hours);
+
+private:
+    QSerialPortInfo radioInfo;
+    QSerialPort *radio = new QSerialPort();
+    QByteArray bufferedData;
 };
 
-#endif // DATAPROCESSING_H
+#endif // DataProcessing_H

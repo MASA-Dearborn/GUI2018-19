@@ -4,12 +4,19 @@
 #include <algorithm>
 #include <QTextStream>
 #include "dataprocessing.h"
+#include <QThread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    //radio = new DataProcessing();
+    radioProcesser->moveToThread(radioThread);
+    connect(radioThread, &QThread::finished, radioProcesser, &QObject::deleteLater);
+    connect(radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);//, Qt::BlockingQueuedConnection);
+    radioThread->start();
+    //radioProcesser.updateGraphData();
     t.resize(length);
     x1.resize(length);
     x2.resize(length);
@@ -21,13 +28,16 @@ MainWindow::MainWindow(QWidget *parent) :
     x2Graph = new QCPCurve(plot->xAxis, plot->yAxis);
     x3Graph = new QCPCurve(plot->xAxis, plot->yAxis);
     //Generate some data
+    /*
     for (int i=0; i<length; ++i)
     {
       t[i]  = (i - length/2)/100.0;
       x1[i] = t[i]*t[i];
       x2[i] = -2*t[i]*t[i] + 5*t[i] + 3;
       x3[i] = exp(t[i]);
+      graphEntries++;
     }
+    */
     //Set the x axis (key) to a dataset
     key = &t;
     //Give the axes some labels
@@ -72,6 +82,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
+    radioThread->exit();
+    radioThread->wait();
     delete ui;
 }
 
@@ -162,10 +174,10 @@ void MainWindow::manualSize() {
 
 void MainWindow::updateGraph() {
     //Update each graph to the new key, and call autosize/parametricRange in case the domain or range changed
-    x1Graph->setData(t, *key, x1, true);
-    x2Graph->setData(t, *key, x2, true);
-    x3Graph->setData(t, *key, x3, true);
-    tGraph->setData(t, *key, t, true);
+    x1Graph->setData(t.mid(0,graphEntries), (*key).mid(0,graphEntries), x1.mid(0,graphEntries), true);
+    x2Graph->setData(t.mid(0,graphEntries), (*key).mid(0,graphEntries), x2.mid(0,graphEntries), true);
+    x3Graph->setData(t.mid(0,graphEntries), (*key).mid(0,graphEntries), x3.mid(0,graphEntries), true);
+    tGraph->setData(t.mid(0,graphEntries), (*key).mid(0,graphEntries), t.mid(0,graphEntries), true);
     parametricRange();
     autoSize();
 }
@@ -199,7 +211,7 @@ void MainWindow::parametricRange() {
     if(axisMode == 2) {
         int minIndex = -1, maxIndex = -1; //Initialize the min/max indicies out of bounds to simplify code in for loop
         //Determine the index in which our parameter (t) is as close to the t value entered by the user
-        for(int i=0; i<length; ++i) {
+        for(int i=0; i<graphEntries; ++i) {
             if(ui->parametricMin->value() <= t[i] && minIndex < 0) {
                 minIndex = i;
             }
@@ -216,7 +228,7 @@ void MainWindow::parametricRange() {
             minIndex = 0;
         }
         if(maxIndex <= -1) {
-            maxIndex = length - 1;
+            maxIndex = graphEntries - 1;
         }
         //Change domain to match the found limits, and then autosize the range appropriately
         ui->graph->xAxis->setRange((*key)[minIndex], (*key)[maxIndex]);
@@ -251,4 +263,55 @@ void MainWindow::on_parametricMin_valueChanged() {
 
 void MainWindow::on_parametricMax_valueChanged() {
     parametricRange();
+}
+
+void MainWindow::updateGraphVectorSize() {
+    t.resize(2*t.length());
+    x1.resize(2*t.length());
+    x2.resize(2*t.length());
+    x3.resize(2*t.length());
+}
+
+void MainWindow::expandGraph() {
+    if(t.length()*0.75 < graphEntries) {
+        updateGraphVectorSize();
+    }
+    graphEntries++;
+    t[graphEntries]  = (graphEntries - 1000/2)/100.0;
+    x1[graphEntries] = t[graphEntries]*t[graphEntries];
+    x2[graphEntries] = -2*t[graphEntries]*t[graphEntries] + 5*t[graphEntries] + 3;
+    x3[graphEntries] = exp(t[graphEntries]);
+}
+
+void MainWindow::updateData(QList<double>* data, short minutes, short hours) {
+    //qDebug() << data[0];
+    //qDebug() << data[1];
+    //qDebug() << data[2];
+    //qDebug() << data[3];
+    qDebug() << "definitely working";
+
+    t[graphEntries]  = (*data)[0];
+    x1[graphEntries] = (*data)[1];
+    x2[graphEntries] = (*data)[2];
+    x3[graphEntries] = (*data)[3];
+
+    free(data);
+    //qDebug() << t[graphEntries];
+    //qDebug() << x1[graphEntries];
+    //qDebug() << x2[graphEntries];
+    //qDebug() << x3[graphEntries];
+    //qDebug() << t[graphEntries];
+    //updateGraph();
+
+    tGraph->addData((*key)[graphEntries], t[graphEntries]);
+    x1Graph->addData((*key)[graphEntries], x1[graphEntries]);
+    x2Graph->addData((*key)[graphEntries], x2[graphEntries]);
+    x3Graph->addData((*key)[graphEntries], x3[graphEntries]);
+
+    parametricRange();
+    autoSize();
+    ++graphEntries;
+    if(t.length()*0.75 < graphEntries) {
+        updateGraphVectorSize();
+    }
 }
