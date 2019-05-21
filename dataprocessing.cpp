@@ -34,7 +34,7 @@ void DataProcessing::readData() {
     bufferedData.append(radioData);
     //qDebug() << bufferedData.length();
     if(bufferedData.length() >= 122) {
-        qDebug() << bufferedData.length();
+        //qDebug() << bufferedData.length();
         QList<double>* data = new QList<double>;
         //qDebug() << "working";
         ///*
@@ -90,7 +90,7 @@ void DataProcessing::readData() {
         */
         //qDebug() << bufferedData.length();
         bufferedData.remove(0,122);
-        //qDebug() << bufferedData.length();
+        //qDebug() << bufferedData.length() << "\n";
         //qDebug() << data;
         //qDebug() << "working";
         emit updateGraphData(data, minutes, hours);

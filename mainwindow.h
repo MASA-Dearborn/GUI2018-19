@@ -24,9 +24,9 @@ private slots:
 
     void on_horizontalAxis_activated(int index);
 
-    void on_autorange_clicked(bool checked);
+    void on_autorange_toggled(bool checked);
 
-    void on_manualSize_clicked(bool checked);
+    void on_manualSize_toggled(bool checked);
 
     void on_xMin_valueChanged();
 
@@ -40,6 +40,8 @@ private slots:
 
     void manualSize();
 
+    //void graphRecent();
+
     void updateGraph();
 
     void on_t_clicked(bool checked);
@@ -50,7 +52,7 @@ private slots:
 
     void on_x3_clicked(bool checked);
 
-    void on_parametric_clicked(bool checked);
+    void on_parametric_toggled(bool checked);
 
     void on_parametricMin_valueChanged();
 
@@ -63,16 +65,30 @@ private slots:
     void updateGraphVectorSize();
 
     void expandGraph();
+
+    void on_recent_toggled(bool checked);
+
+    void recentSize();
+
+    void setNewMeanDeviation();
+
+    int findTimeIndex(double targetTime);
 private:
     Ui::MainWindow *ui;
     QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
     QCustomPlot *plot;
     long int length = 100;
     QVector<double> x1, x2, x3, t, *key;
-    int axisMode = 0;
     long int graphEntries = 0;
     DataProcessing *radioProcesser = new DataProcessing();
     QThread *radioThread = new QThread();
+    enum axisType {MANUAL, AUTO, PARAMETRIC, RECENT};
+    axisType axisMode = MANUAL;
+    long int recentIndex = -1;
+    double epsilon = 0.1;
+    bool newMean = true;
+    double mean, stdDeviation;
+    int parametricMin = -1, parametricMax = -1;
 };
 
 #endif // MAINWINDOW_H

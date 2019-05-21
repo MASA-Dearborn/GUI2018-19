@@ -93,38 +93,42 @@ void MainWindow::on_horizontalAxis_activated(int index) {
     case 0 :
         key = &t;
         ui->graph->xAxis->setLabel("t");
-    break;
+        break;
 
     case 1 :
         key = &x1;
         ui->graph->xAxis->setLabel("x1");
-    break;
+        break;
 
     case 2 :
         key = &x2;
         ui->graph->xAxis->setLabel("x2");
-    break;
+        break;
 
     case 3 :
         key = &x3;
         ui->graph->xAxis->setLabel("x3");
-    break;
+        break;
     }
     updateGraph();
 }
 
-void MainWindow::on_autorange_clicked(bool checked) {
+void MainWindow::on_autorange_toggled(bool checked) {
     //Set the graph to autosize
     if(checked) {
-        axisMode = 1;
+        axisMode = AUTO;
+        parametricMin = -1;
+        parametricMax = -1;
         autoSize();
     }
 }
 
-void MainWindow::on_manualSize_clicked(bool checked) {
+void MainWindow::on_manualSize_toggled(bool checked) {
     //Set graph to manualsize
     if(checked) {
-        axisMode = 0;
+        axisMode = MANUAL;
+        parametricMin = -1;
+        parametricMax = -1;
         manualSize();
     }
 }
@@ -146,17 +150,17 @@ void MainWindow::on_yMax_valueChanged() {
     manualSize();
 }
 
-void MainWindow::on_parametric_clicked(bool checked) {
+void MainWindow::on_parametric_toggled(bool checked) {
     //If parametric button is checked change the x and y axis to include all plotted data in the given t range
     if(checked) {
-        axisMode = 2;
+        axisMode = PARAMETRIC;
         parametricRange();
     }
 }
 
 void MainWindow::autoSize() {
     //If autosize button is checked change the x and y axis to include all plotted data
-    if(axisMode == 1) {
+    if(axisMode == AUTO) {
         plot->xAxis->rescale(true);
         plot->yAxis->rescale(true);
     }
@@ -165,7 +169,7 @@ void MainWindow::autoSize() {
 
 void MainWindow::manualSize() {
     //If the manualsize button is checked set the x and y axis to the selected min/max
-    if(axisMode == 0) {
+    if(axisMode == MANUAL) {
         ui->graph->xAxis->setRange(ui->xMin->value(), ui->xMax->value());
         ui->graph->yAxis->setRange(ui->yMin->value(), ui->yMax->value());
         ui->graph->replot();
@@ -208,31 +212,25 @@ void MainWindow::on_x3_clicked(bool checked) {
 }
 
 void MainWindow::parametricRange() {
-    if(axisMode == 2) {
-        int minIndex = -1, maxIndex = -1; //Initialize the min/max indicies out of bounds to simplify code in for loop
-        //Determine the index in which our parameter (t) is as close to the t value entered by the user
-        for(int i=0; i<graphEntries; ++i) {
-            if(ui->parametricMin->value() <= t[i] && minIndex < 0) {
-                minIndex = i;
-            }
-            if(ui->parametricMax->value() <= t[i] && maxIndex < 0) {
-                maxIndex = i;
-            }
-            //If the min and max indicies are both found break loop
-            if(minIndex >= 0 && maxIndex >= 0) {
-                break;
+    if(axisMode == PARAMETRIC) {
+        if(parametricMin >= 0 && parametricMax >= 0) {
+            if(abs(t[parametricMin] - ui->parametricMin->value()) < epsilon && abs(t[parametricMax] - ui->parametricMax->value()) < epsilon) {
+                return;
             }
         }
+        //qDebug() << "Parametric sizing found a new domain\n";
+        parametricMin = findTimeIndex(ui->parametricMin->value());
+        parametricMax = findTimeIndex(ui->parametricMax->value());
         //If either the min/max indicies provided cannot be found initialize the indicies to the first or last possible value respectively
-        if(minIndex <= -1) {
-            minIndex = 0;
+        if(parametricMin <= -1) {
+            parametricMin = 0;
         }
-        if(maxIndex <= -1) {
-            maxIndex = graphEntries - 1;
+        if(parametricMax <= -1) {
+            parametricMax = graphEntries - 1;
         }
         //Change domain to match the found limits, and then autosize the range appropriately
-        ui->graph->xAxis->setRange((*key)[minIndex], (*key)[maxIndex]);
-        scaleValueAxisInKey((*key)[minIndex], (*key)[maxIndex]);
+        ui->graph->xAxis->setRange((*key)[parametricMin], (*key)[parametricMax]);
+        scaleValueAxisInKey((*key)[parametricMin], (*key)[parametricMax]);
     }
 }
 
@@ -288,7 +286,7 @@ void MainWindow::updateData(QList<double>* data, short minutes, short hours) {
     //qDebug() << data[1];
     //qDebug() << data[2];
     //qDebug() << data[3];
-    qDebug() << "definitely working";
+    //qDebug() << "definitely working";
 
     t[graphEntries]  = (*data)[0];
     x1[graphEntries] = (*data)[1];
@@ -308,10 +306,95 @@ void MainWindow::updateData(QList<double>* data, short minutes, short hours) {
     x2Graph->addData((*key)[graphEntries], x2[graphEntries]);
     x3Graph->addData((*key)[graphEntries], x3[graphEntries]);
 
+    ++graphEntries;
     parametricRange();
     autoSize();
-    ++graphEntries;
+    recentSize();
     if(t.length()*0.75 < graphEntries) {
         updateGraphVectorSize();
     }
+}
+
+void MainWindow::on_recent_toggled(bool checked)
+{
+    if(checked) {
+        axisMode = RECENT;
+        parametricMin = -1;
+        parametricMax = -1;
+        recentSize();
+    }
+}
+
+void MainWindow::recentSize() {
+    //qDebug() << "Called\n";
+    if(axisMode == RECENT) {
+        if(ui->recentTime->value() > t[graphEntries - 1]) {
+            axisMode = AUTO;
+            autoSize();
+            axisMode = RECENT;
+        }
+        else {
+            int index = findTimeIndex(t[graphEntries - 1] - ui->recentTime->value());
+            if(index == -1) { return; }
+            ui->graph->xAxis->setRange((*key)[index], (*key)[graphEntries - 1]);
+            scaleValueAxisInKey((*key)[index], (*key)[graphEntries - 1]);
+        }
+    }
+}
+
+void MainWindow::setNewMeanDeviation() {
+    int sampleNum = static_cast<int>(0.05*graphEntries + 1);
+    double *sampleData = reinterpret_cast<double*>(malloc(sampleNum*sizeof(double)));
+    mean = 0;
+    for(int i = 0; i < sampleNum; i++) {
+        int entry = rand() % (graphEntries - 1);
+        sampleData[i] = t[entry + 1] - t[entry];
+        mean += sampleData[i];
+    }
+    mean /= sampleNum;
+    stdDeviation = 0;
+    for(int i = 0; i < sampleNum; i++) {
+        stdDeviation += pow(sampleData[i] - mean, 2);
+    }
+    stdDeviation /= (sampleNum - 1);
+    stdDeviation = sqrt(stdDeviation);
+    newMean = false;
+}
+
+int MainWindow::findTimeIndex(double targetTime) {
+    if(newMean) { setNewMeanDeviation(); }
+    if(targetTime < t[0] || targetTime > t[graphEntries -1]) { return -1; }
+    int minIndex, maxIndex;
+    minIndex = graphEntries - (t[graphEntries - 1] - targetTime - stdDeviation)/mean - 2;
+    maxIndex = graphEntries - (t[graphEntries - 1] - targetTime + stdDeviation)/mean;
+    if(maxIndex == graphEntries) { maxIndex--; }
+    int stdsAway = 0;
+    //qDebug() << t[minIndex] << " " << t[maxIndex] << " " << targetTime << "\n";
+    while(targetTime > t[maxIndex]) {
+        minIndex += stdDeviation/mean + 1;
+        maxIndex += stdDeviation/mean + 1;
+        newMean = true;
+        stdsAway++;
+        if(maxIndex > (graphEntries - 1) || stdsAway > 2) { return -1; }
+    }
+    while(targetTime < t[minIndex]) {
+        //qDebug() << targetTime << " " << t[minIndex] << "\n";
+        minIndex -= stdDeviation/mean + 1;
+        maxIndex -= stdDeviation/mean + 1;
+        newMean = true;
+        stdsAway++;
+        if(minIndex < 0 || stdsAway > 2) { return -1; }
+    }
+    while(abs(t[(minIndex + maxIndex)/2] - targetTime) > epsilon) {
+        if(t[(minIndex + maxIndex)/2] < targetTime) {
+            minIndex = (minIndex + maxIndex)/2;
+        }
+        else {
+            maxIndex = (minIndex + maxIndex)/2;
+        }
+    }
+    //if(newMean) {
+    //    qDebug() << "New mean found\n";
+    //}
+    return (minIndex + maxIndex)/2;
 }
