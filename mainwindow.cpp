@@ -288,6 +288,40 @@ void MainWindow::updateData(QList<double>* data, short minutes, short hours) {
     //qDebug() << data[3];
     //qDebug() << "definitely working";
 
+    if(graphEntries != 0) {
+        if(dubiousData == NULL) {
+            if(abs((*data)[0] - t[graphEntries - 1]) > 1) {
+                dubiousData = data;
+                return;
+            }
+        }
+        else {
+            //qDebug() << "Possibly corrupt data " << (*dubiousData)[0] << "\n";
+            if(abs((*data)[0] - (*dubiousData)[0]) > 1) {
+                free(dubiousData);
+                dubiousData = NULL;
+                if(abs((*data)[0] - t[graphEntries - 1]) > 1) {
+                    dubiousData = data;
+                    return;
+                }
+            }
+            else if((*data)[0] == (*dubiousData)[0]) {
+                free(dubiousData);
+                free(data);
+                dubiousData = NULL;
+                return;
+            }
+            else {
+                t[graphEntries]  = (*dubiousData)[0];
+                x1[graphEntries] = (*dubiousData)[1];
+                x2[graphEntries] = (*dubiousData)[2];
+                x3[graphEntries] = (*dubiousData)[3];
+                ++graphEntries;
+                free(dubiousData);
+            }
+        }
+    }
+
     t[graphEntries]  = (*data)[0];
     x1[graphEntries] = (*data)[1];
     x2[graphEntries] = (*data)[2];
