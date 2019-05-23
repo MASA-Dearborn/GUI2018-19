@@ -213,20 +213,43 @@ void MainWindow::on_x3_clicked(bool checked) {
 
 void MainWindow::parametricRange() {
     if(axisMode == PARAMETRIC) {
+        double minTime = ui->parametricMin->value();
+        double maxTime = ui->parametricMax->value();
+        if(minTime > maxTime) {
+            double temp = parametricMax;
+            maxTime = minTime;
+            minTime = temp;
+        }
+        if(maxTime < 0) {
+            return;
+        }
+        if(minTime > t[graphEntries - 1]) {
+            return;
+        }
+
         if(parametricMin >= 0 && parametricMax >= 0) {
-            if(abs(t[parametricMin] - ui->parametricMin->value()) < epsilon && abs(t[parametricMax] - ui->parametricMax->value()) < epsilon) {
+            if(abs(t[parametricMin] - minTime) < epsilon && abs(t[parametricMax] - maxTime) < epsilon) {
                 return;
             }
         }
-        //qDebug() << "Parametric sizing found a new domain\n";
-        parametricMin = findTimeIndex(ui->parametricMin->value());
-        parametricMax = findTimeIndex(ui->parametricMax->value());
-        //If either the min/max indicies provided cannot be found initialize the indicies to the first or last possible value respectively
-        if(parametricMin <= -1) {
+        parametricMin = -1;
+        parametricMax = -1;
+        if(maxTime > t[graphEntries - 1]) {
+            parametricMax = graphEntries - 1;
+        }
+        if(minTime < 0) {
             parametricMin = 0;
         }
-        if(parametricMax <= -1) {
-            parametricMax = graphEntries - 1;
+        //qDebug() << "Input sanatized\n";
+        //qDebug() << "Parametric sizing found a new domain\n";
+        //qDebug() << "Find indicies\n";
+        if(parametricMin != 0) { parametricMin = findTimeIndex(minTime); }
+        if(parametricMax != (graphEntries - 1)) { parametricMax = findTimeIndex(maxTime); }
+        //qDebug() << parametricMin << " " << parametricMax << " " << graphEntries - 1 << "\n";
+        //If either the min/max indicies provided cannot be found initialize the indicies to the first or last possible value respectively
+        if(parametricMin == -1 || parametricMax == -1) {
+            //qDebug() << "Couldn't find minimum or minimum index\n";
+            return;
         }
         //Change domain to match the found limits, and then autosize the range appropriately
         ui->graph->xAxis->setRange((*key)[parametricMin], (*key)[parametricMax]);
@@ -288,6 +311,40 @@ void MainWindow::updateData(QList<double>* data, short minutes, short hours) {
     //qDebug() << data[3];
     //qDebug() << "definitely working";
 
+    if(graphEntries != 0) {
+        if(dubiousData == NULL) {
+            if(abs((*data)[0] - t[graphEntries - 1]) > 1) {
+                dubiousData = data;
+                return;
+            }
+        }
+        else {
+            qDebug() << "Possibly corrupt data\n";
+            if(abs((*data)[0] - (*dubiousData)[0]) > 1) {
+                free(dubiousData);
+                dubiousData = NULL;
+                if(abs((*data)[0] - t[graphEntries - 1]) > 1) {
+                    dubiousData = data;
+                    return;
+                }
+            }
+            else if((*data)[0] == (*dubiousData)[0]) {
+                free(dubiousData);
+                free(data);
+                dubiousData = NULL;
+                return;
+            }
+            else {
+                t[graphEntries]  = (*dubiousData)[0];
+                x1[graphEntries] = (*dubiousData)[1];
+                x2[graphEntries] = (*dubiousData)[2];
+                x3[graphEntries] = (*dubiousData)[3];
+                ++graphEntries;
+                free(dubiousData);
+            }
+        }
+    }
+
     t[graphEntries]  = (*data)[0];
     x1[graphEntries] = (*data)[1];
     x2[graphEntries] = (*data)[2];
@@ -343,7 +400,7 @@ void MainWindow::recentSize() {
 }
 
 void MainWindow::setNewMeanDeviation() {
-    int sampleNum = static_cast<int>(0.05*graphEntries + 1);
+    int sampleNum = static_cast<int>(sampleSize*graphEntries + 1);
     double *sampleData = reinterpret_cast<double*>(malloc(sampleNum*sizeof(double)));
     mean = 0;
     for(int i = 0; i < sampleNum; i++) {
@@ -356,8 +413,11 @@ void MainWindow::setNewMeanDeviation() {
     for(int i = 0; i < sampleNum; i++) {
         stdDeviation += pow(sampleData[i] - mean, 2);
     }
+    //qDebug() << "Step 1: " << stdDeviation << "\n";
     stdDeviation /= (sampleNum - 1);
+    //qDebug() << "Step 2: " << stdDeviation << "\n";
     stdDeviation = sqrt(stdDeviation);
+    //qDebug() << "Step 3: " << stdDeviation << "\n";
     newMean = false;
 }
 
@@ -365,33 +425,58 @@ int MainWindow::findTimeIndex(double targetTime) {
     if(newMean) { setNewMeanDeviation(); }
     if(targetTime < t[0] || targetTime > t[graphEntries -1]) { return -1; }
     int minIndex, maxIndex;
-    minIndex = graphEntries - (t[graphEntries - 1] - targetTime - stdDeviation)/mean - 2;
-    maxIndex = graphEntries - (t[graphEntries - 1] - targetTime + stdDeviation)/mean;
-    if(maxIndex == graphEntries) { maxIndex--; }
-    int stdsAway = 0;
+    //if(stdDeviation == 0) { stdDeviation = mean; }
+    minIndex = graphEntries - (t[graphEntries - 1] - targetTime)/(mean - stdDeviation) - 2;
+    maxIndex = graphEntries - (t[graphEntries - 1] - targetTime)/(mean + stdDeviation);
+    while(maxIndex >= graphEntries) { maxIndex--; }
+    while(minIndex >= graphEntries) { minIndex--; }
+    while(minIndex < 0) { minIndex++; }
+    while(maxIndex < 0) { maxIndex++; }
+    //int stdsAway = 0;
+    //qDebug() << "Standard Deviation: " << stdDeviation << "\n";
+    //qDebug() << "Minimum Index: " << minIndex << " Maximum Index: " << maxIndex << " Most recent time: " << t[graphEntries - 1] << " Target time: " << targetTime << " Mean: " << mean << " Standard Deviation: " << (int)stdDeviation/mean << " Number of Entries: " << graphEntries - 1 << "\n";
     //qDebug() << t[minIndex] << " " << t[maxIndex] << " " << targetTime << "\n";
-    while(targetTime > t[maxIndex]) {
-        minIndex += stdDeviation/mean + 1;
-        maxIndex += stdDeviation/mean + 1;
-        newMean = true;
-        stdsAway++;
-        if(maxIndex > (graphEntries - 1) || stdsAway > 2) { return -1; }
+    //qDebug() << "Found initial indices\n";
+    //qDebug() << "Original minimum time: " << t[minIndex] << " Original maximum time: " << t[maxIndex] << "\n";
+    for(int i = 2;; i++) {
+        if(targetTime <= t[maxIndex]) { break; }
+        if(i > 4) { newMean = true; return -1; }
+        if(maxIndex > (graphEntries - 1)) { maxIndex = graphEntries - 1; }
+        minIndex = graphEntries - (t[graphEntries - 1] - targetTime)/(mean + (i - 1)*stdDeviation) - 2;
+        maxIndex = graphEntries - (t[graphEntries - 1] - targetTime)/(mean + i*stdDeviation);
     }
+    for(int i = 2;; i++) {
+        if(targetTime >= t[minIndex]) { break; }
+        if(i > 4) { newMean = true; return -1; }
+        if(minIndex < 0) { minIndex = 0; }
+        minIndex = graphEntries - (t[graphEntries - 1] - targetTime)/(mean - i*stdDeviation) - 2;
+        maxIndex = graphEntries - (t[graphEntries - 1] - targetTime)/(mean - (i - 1)*stdDeviation);
+    }
+    /*
+    while(targetTime > t[maxIndex]) {
+        if(maxIndex > (graphEntries - 1) || stdsAway > 2) { newMean = true; return -1; }
+        minIndex += (1 + 1/(4*sampleSize*(graphEntries + 1)))*stdDeviation/mean + 1;
+        maxIndex += (1 + 1/(4*sampleSize*(graphEntries + 1)))*stdDeviation/mean + 1;
+        stdsAway++;
+    }
+    //qDebug() << "Time below max index\n";
     while(targetTime < t[minIndex]) {
         //qDebug() << targetTime << " " << t[minIndex] << "\n";
-        minIndex -= stdDeviation/mean + 1;
-        maxIndex -= stdDeviation/mean + 1;
-        newMean = true;
+        if(minIndex < 0 || stdsAway > 2) { newMean = true; return -1; }
+        minIndex -= (1 + 1/(4*sampleSize*(graphEntries + 1)))*stdDeviation/mean + 1;
+        maxIndex -= (1 + 1/(4*sampleSize*(graphEntries + 1)))*stdDeviation/mean + 1;
         stdsAway++;
-        if(minIndex < 0 || stdsAway > 2) { return -1; }
     }
-    while(abs(t[(minIndex + maxIndex)/2] - targetTime) > epsilon) {
+    */
+    //qDebug() << "Time above min index\n";
+    while((maxIndex - minIndex) > 1) {
         if(t[(minIndex + maxIndex)/2] < targetTime) {
             minIndex = (minIndex + maxIndex)/2;
         }
         else {
             maxIndex = (minIndex + maxIndex)/2;
         }
+        //if(minIndex == maxIndex) { break; }
     }
     //if(newMean) {
     //    qDebug() << "New mean found\n";

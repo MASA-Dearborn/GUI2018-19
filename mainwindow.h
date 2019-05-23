@@ -89,6 +89,8 @@ private:
     bool newMean = true;
     double mean, stdDeviation;
     int parametricMin = -1, parametricMax = -1;
+    QList<double>* dubiousData = NULL;
+    double sampleSize = 0.05;
 };
 
 #endif // MAINWINDOW_H

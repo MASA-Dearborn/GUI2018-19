@@ -7,6 +7,7 @@
 
 DataProcessing::DataProcessing()
 {
+    radio = new QSerialPort(this);
     qDebug() << "Number of serial ports:" << QSerialPortInfo::availablePorts().count();
 
     foreach(const QSerialPortInfo &info,QSerialPortInfo::availablePorts()) {
@@ -23,7 +24,7 @@ DataProcessing::DataProcessing()
     radio->open(QSerialPort::ReadOnly);
     connect(radio,&QSerialPort::readyRead,this,&DataProcessing::readData);
 }
-//void DataProcessing::updateGraphData() {}
+
 void DataProcessing::readData() {
     QByteArray radioData = radio->readAll();
     //double altitude, pressure, humidity, teslaX, teslaY, teslaZ, gyroX, gyroY, gyroZ,
@@ -90,7 +91,7 @@ void DataProcessing::readData() {
         */
         //qDebug() << bufferedData.length();
         bufferedData.remove(0,122);
-        //qDebug() << bufferedData.length() << "\n";
+        qDebug() << bufferedData.length() << "\n";
         //qDebug() << data;
         //qDebug() << "working";
         emit updateGraphData(data, minutes, hours);
