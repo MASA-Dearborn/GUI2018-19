@@ -64,8 +64,6 @@ private slots:
 
     void updateGraphVectorSize();
 
-    void expandGraph();
-
     void on_recent_toggled(bool checked);
 
     void recentSize();
@@ -73,6 +71,9 @@ private slots:
     void setNewMeanDeviation();
 
     int findTimeIndex(double targetTime);
+
+    void on_recentTime_valueChanged();
+
 private:
     Ui::MainWindow *ui;
     QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
