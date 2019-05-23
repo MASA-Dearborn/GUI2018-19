@@ -20,7 +20,7 @@ signals:
 
 private:
     QSerialPortInfo radioInfo;
-    QSerialPort *radio = new QSerialPort();
+    QSerialPort *radio;
     QByteArray bufferedData;
 };
 
