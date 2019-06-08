@@ -18,7 +18,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 public slots:
-    void updateData(QList<double>* data, short minutes, short hours);
+    void updateData(QList<double>* data);
 
 private slots:
 
@@ -44,14 +44,6 @@ private slots:
 
     void updateGraph();
 
-    void on_t_clicked(bool checked);
-
-    void on_x1_clicked(bool checked);
-
-    void on_x2_clicked(bool checked);
-
-    void on_x3_clicked(bool checked);
-
     void on_parametric_toggled(bool checked);
 
     void on_parametricMin_valueChanged();
@@ -74,12 +66,24 @@ private slots:
 
     void on_recentTime_valueChanged();
 
+    void on_enableGraphs_itemChanged(QListWidgetItem *item);
+
+    void on_sleepButton_clicked();
+    void on_stopButton_clicked();
+
+signals:
+    void sendMessage(char *message, int length);
 private:
     Ui::MainWindow *ui;
-    QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
+    QCPCurve *timeGraph, *latitudeGraph, *longitudeGraph,  *gpsAltitudeGraph, *gpsSpeedGraph, *xAccelerationGraph, *yAccelerationGraph,
+    *zAccelerationGraph, *xOrientationGraph, *yOrientationGraph, *zOrientationGraph, *xAngularVelocityGraph, *yAngularVelocityGraph,
+    *zAngularVelocityGraph, *xMagneticFieldGraph, *yMagneticFieldGraph, *zMagneticFieldGraph, *temperatureGraph, *pressureGraph,
+    *altimeterAltitudeGraph, *humidityGraph;
     QCustomPlot *plot;
     long int length = 100;
-    QVector<double> x1, x2, x3, t, *key;
+    QVector<double> time, latitude, longitude, gpsAltitude, gpsSpeed, xAcceleration, yAcceleration, zAcceleration, xOrientation,
+    yOrientation, zOrientation, xAngularVelocity, yAngularVelocity, zAngularVelocity, xMagneticField, yMagneticField, zMagneticField,
+    temperature, pressure, altimeterAltitude, humidity, *key;
     long int graphEntries = 0;
     DataProcessing *radioProcesser = new DataProcessing();
     QThread *radioThread = new QThread();
@@ -92,6 +96,9 @@ private:
     int parametricMin = -1, parametricMax = -1;
     QList<double>* dubiousData = NULL;
     double sampleSize = 0.05;
+    float initSecond;
+    int initMinute, initHour, initDay, initMonth;
+    bool isAsleep = false, isStopped = false;
 };
 
 #endif // MAINWINDOW_H
