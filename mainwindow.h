@@ -20,6 +20,9 @@ public:
 public slots:
     void updateData(QList<double>* data);
 
+    void addPort(QList<QString> *names);
+
+    //void removePort(QList<QString> *names);
 private slots:
 
     void on_horizontalAxis_activated(int index);
@@ -69,10 +72,19 @@ private slots:
     void on_enableGraphs_itemChanged(QListWidgetItem *item);
 
     void on_sleepButton_clicked();
+
     void on_stopButton_clicked();
 
+    void on_comPorts_currentIndexChanged(const QString &arg1);
+
 signals:
-    void sendMessage(char *message, int length);
+    void sendMessage(QByteArray *message);
+
+    void enumeratePorts();
+
+    void changePorts(QString name);
+
+    void changeStopState(bool state);
 private:
     Ui::MainWindow *ui;
     QCPCurve *timeGraph, *latitudeGraph, *longitudeGraph,  *gpsAltitudeGraph, *gpsSpeedGraph, *xAccelerationGraph, *yAccelerationGraph,
@@ -98,7 +110,8 @@ private:
     double sampleSize = 0.05;
     float initSecond;
     int initMinute, initHour, initDay, initMonth;
-    bool isAsleep = false, isStopped = false;
+    bool isAsleep = false, isStopped = true;
+    //QVector<QPen> colors = {QPen(Qt::red), QPen(Qt::blue), QPen(Qt::black), QPen(Qt::gray), QPen(Qt::green), QPen(Qt::magenta), QPen(Qt::)};
 };
 
 #endif // MAINWINDOW_H

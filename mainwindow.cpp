@@ -15,7 +15,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(radioThread, &QThread::finished, radioProcesser, &QObject::deleteLater);
     connect(radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);//, Qt::BlockingQueuedConnection);
     connect(this, &MainWindow::sendMessage, radioProcesser, &DataProcessing::sendMessage);
+    connect(radioProcesser, &DataProcessing::addPort, this, &MainWindow::addPort);
+    connect(this, &MainWindow::changePorts, radioProcesser, &DataProcessing::changePort);
+    connect(this, &MainWindow::changeStopState, radioProcesser, &DataProcessing::changeStopState);
     radioThread->start();
+    //emit enumeratePorts();
     time.resize(length);
     latitude.resize(length);
     longitude.resize(length);
@@ -126,6 +130,29 @@ MainWindow::MainWindow(QWidget *parent) :
     altimeterAltitudeGraph->setName("Altimeter Altitude");
     humidityGraph->setName("Humidity");
 
+    timeGraph->setPen(QPen(Qt::blue));
+    latitudeGraph->setPen(QPen(Qt::red));
+    longitudeGraph->setPen(QPen(Qt::green));
+    gpsAltitudeGraph->setPen(QPen(Qt::yellow));
+    gpsSpeedGraph->setPen(QPen(Qt::magenta));
+    xAccelerationGraph->setPen(QPen(Qt::black));
+    yAccelerationGraph->setPen(QPen(Qt::gray));
+    zAccelerationGraph->setPen(QPen(Qt::cyan));
+    xOrientationGraph->setPen(QPen(QColor(255, 0, 255)));
+    yOrientationGraph->setPen(QPen(QColor(173,251,37)));
+    zOrientationGraph->setPen(QPen(QColor(74,37,180)));
+    xAngularVelocityGraph->setPen(QPen(QColor(68,222,97)));
+    yAngularVelocityGraph->setPen(QPen(QColor(169,25,236)));
+    zAngularVelocityGraph->setPen(QPen(QColor(156,38,92)));
+    xMagneticFieldGraph->setPen(QPen(QColor(15,64,100)));
+    yMagneticFieldGraph->setPen(QPen(QColor(68,147,95)));
+    zMagneticFieldGraph->setPen(QPen(QColor(234,122,222)));
+    temperatureGraph->setPen(QPen(QColor(054,66,222)));
+    pressureGraph->setPen(QPen(QColor(94,35,88)));
+    altimeterAltitudeGraph->setPen(QPen(QColor(110,230,129)));
+    humidityGraph->setPen(QPen(QColor(74,129,222)));
+
+
     /*
     tGraph->setPen(QPen(Qt::blue));
     x1Graph->setPen(QPen(Qt::red));
@@ -139,14 +166,38 @@ MainWindow::MainWindow(QWidget *parent) :
     */
     //Place legend along bottom of the plot instead of in the corner
     QCPLayoutGrid *subLayout = new QCPLayoutGrid;
-    plot->plotLayout()->addElement(1, 0, subLayout);
+
+    plot->plotLayout()->addElement(0, 1, subLayout);
     subLayout->setMargins(QMargins(5, 0, 5, 5));
     subLayout->addElement(0, 0, plot->legend);
+    plot->plotLayout()->setColumnStretchFactor(1, 0.1);
     //Change the fill order of the legend, so it's filled left to right in columns
-    plot->legend->setFillOrder(QCPLegend::foColumnsFirst);
+    plot->legend->setFillOrder(QCPLegend::foRowsFirst);
+    plot->legend->setWrap(11);
     //Set legend's row stretch factor very small so it ends up with minimum height
     plot->plotLayout()->setRowStretchFactor(1, 0.001);
     plot->legend->setVisible(true);
+    timeGraph->removeFromLegend();
+    latitudeGraph->removeFromLegend();
+    longitudeGraph->removeFromLegend();
+    gpsAltitudeGraph->removeFromLegend();
+    gpsSpeedGraph->removeFromLegend();
+    xAccelerationGraph->removeFromLegend();
+    yAccelerationGraph->removeFromLegend();
+    zAccelerationGraph->removeFromLegend();
+    xOrientationGraph->removeFromLegend();
+    yOrientationGraph->removeFromLegend();
+    zOrientationGraph->removeFromLegend();
+    xAngularVelocityGraph->removeFromLegend();
+    yAngularVelocityGraph->removeFromLegend();
+    zAngularVelocityGraph->removeFromLegend();
+    xMagneticFieldGraph->removeFromLegend();
+    yMagneticFieldGraph->removeFromLegend();
+    zMagneticFieldGraph->removeFromLegend();
+    temperatureGraph->removeFromLegend();
+    pressureGraph->removeFromLegend();
+    altimeterAltitudeGraph->removeFromLegend();
+    humidityGraph->removeFromLegend();
     updateGraph();
 }
 
@@ -579,7 +630,7 @@ void MainWindow::updateData(QList<double>* data) {
             //If it is, then assign pointer to data and move to next piece of data
             //to compare it to by returning
             if(abs(timeStamp - time[graphEntries - 1]) > 1) {
-                qDebug() << "Possibly corrupt data\n";
+                //qDebug() << "Possibly corrupt data\n";
                 dubiousData = data;
                 return;
             }
@@ -588,10 +639,10 @@ void MainWindow::updateData(QList<double>* data) {
             //If the previous piece of data is possibly corrupted perform the same
             //test with the newest piece of data
             double dubiousTimeStamp = ((dubiousData->at(0) - initSecond) + 60*(dubiousData->at(21) - initMinute) + 3600*(dubiousData->at(22) - initHour) + 86400*(dubiousData->at(23) - initDay));
-            qDebug() << "Possibly corrupt data\n";
+            //qDebug() << "Possibly corrupt data\n";
             if(abs(timeStamp - dubiousTimeStamp) > 1) {
                 //Free previous piece of data and perform corruption test on piece of new data
-                qDebug() << "Corrupt data\n";
+                qDebug() << dubiousTimeStamp << " " << timeStamp << "\n";
                 free(dubiousData);
                 dubiousData = NULL;
                 if(abs(timeStamp  - time[graphEntries - 1]) > 1) {
@@ -616,8 +667,8 @@ void MainWindow::updateData(QList<double>* data) {
                     qDebug() << dubiousData->at(i) << "\n";
                 }
                 */
-                qDebug() << (time.length() - graphEntries);
-                qDebug() << "\n";
+                //qDebug() << (time.length() - graphEntries);
+                //qDebug() << "\n";
 
                 time[graphEntries]              = dubiousTimeStamp;
                 latitude[graphEntries]          = dubiousData->at(1);
@@ -640,10 +691,10 @@ void MainWindow::updateData(QList<double>* data) {
                 pressure[graphEntries]          = dubiousData->at(18);
                 altimeterAltitude[graphEntries] = dubiousData->at(19);
                 humidity[graphEntries]          = dubiousData->at(20);
-                qDebug() << "Free data\n";
+                //qDebug() << "Free data\n";
                 free(dubiousData);
                 dubiousData = NULL;
-                qDebug() << "Data added\n";
+                //qDebug() << "Data added\n";
                 //Add the previous piece of data to the graphs
                 timeGraph->addData((*key)[graphEntries], time[graphEntries]);
                 latitudeGraph->addData((*key)[graphEntries], latitude[graphEntries]);
@@ -804,66 +855,192 @@ void MainWindow::on_enableGraphs_itemChanged(QListWidgetItem *item)
 {
     if(item->text().compare("Time") == 0) {
         timeGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            timeGraph->addToLegend();
+        }
+        else {
+            timeGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Latitude") == 0) {
         latitudeGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            latitudeGraph->addToLegend();
+        }
+        else {
+            latitudeGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Longitude") == 0) {
         longitudeGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            longitudeGraph->addToLegend();
+        }
+        else {
+            longitudeGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("GPS Altitude") == 0) {
         gpsAltitudeGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            gpsAltitudeGraph->addToLegend();
+        }
+        else {
+            gpsAltitudeGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("GPS Speed") == 0) {
         gpsSpeedGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            gpsSpeedGraph->addToLegend();
+        }
+        else {
+            gpsSpeedGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("X Acceleration") == 0) {
         xAccelerationGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            xAccelerationGraph->addToLegend();
+        }
+        else {
+            xAccelerationGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Y Acceleration") == 0) {
         yAccelerationGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            yAccelerationGraph->addToLegend();
+        }
+        else {
+            yAccelerationGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Z Acceleration") == 0) {
         zAccelerationGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            zAccelerationGraph->addToLegend();
+        }
+        else {
+            zAccelerationGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("X Orientation") == 0) {
         xOrientationGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            xOrientationGraph->addToLegend();
+        }
+        else {
+            xOrientationGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Y Orientation") == 0) {
         yOrientationGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            yOrientationGraph->addToLegend();
+        }
+        else {
+            yOrientationGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Z Orientation") == 0) {
         zOrientationGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            zOrientationGraph->addToLegend();
+        }
+        else {
+            zOrientationGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("X Angular Velocity") == 0) {
         xAngularVelocityGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            xAngularVelocityGraph->addToLegend();
+        }
+        else {
+            xAngularVelocityGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Y Angular Velocity") == 0) {
         yAngularVelocityGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            yAngularVelocityGraph->addToLegend();
+        }
+        else {
+            yAngularVelocityGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Z Angular Velocity") == 0) {
         zAngularVelocityGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            zAngularVelocityGraph->addToLegend();
+        }
+        else {
+            zAngularVelocityGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("X Magnetic Field") == 0) {
         xMagneticFieldGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            xMagneticFieldGraph->addToLegend();
+        }
+        else {
+            xMagneticFieldGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Y Magnetic Field") == 0) {
         yMagneticFieldGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            yMagneticFieldGraph->addToLegend();
+        }
+        else {
+            yMagneticFieldGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Z Magnetic Field") == 0) {
         zMagneticFieldGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            zMagneticFieldGraph->addToLegend();
+        }
+        else {
+            zMagneticFieldGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Temperature") == 0) {
         temperatureGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            temperatureGraph->addToLegend();
+        }
+        else {
+            temperatureGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Pressure") == 0) {
         pressureGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            pressureGraph->addToLegend();
+        }
+        else {
+            pressureGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Altimeter Altitude") == 0) {
         altimeterAltitudeGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            altimeterAltitudeGraph->addToLegend();
+        }
+        else {
+            altimeterAltitudeGraph->removeFromLegend();
+        }
     }
     else if(item->text().compare("Humidity") == 0) {
         humidityGraph->setVisible(item->checkState());
+        if(item->checkState()) {
+            humidityGraph->addToLegend();
+        }
+        else {
+            humidityGraph->removeFromLegend();
+        }
     }
 
     autoSize();
@@ -875,11 +1052,13 @@ void MainWindow::on_enableGraphs_itemChanged(QListWidgetItem *item)
 void MainWindow::on_sleepButton_clicked()
 {
     if(isAsleep) {
-        emit sendMessage("Wake", 4);
+        QByteArray *message = new QByteArray("Wake", 4);
+        emit sendMessage(message);
         ui->sleepButton->setText("Sleep");
     }
     else {
-       emit sendMessage("Sleep", 5);
+       QByteArray *message = new QByteArray("Sleep", 5);
+       emit sendMessage(message);
        ui->sleepButton->setText("Wake");
     }
     isAsleep = !isAsleep;
@@ -888,12 +1067,68 @@ void MainWindow::on_sleepButton_clicked()
 void MainWindow::on_stopButton_clicked()
 {
     if(isStopped) {
-        emit sendMessage("Start", 5);
+        QByteArray *message1 = new QByteArray("Stop", 4);
+        emit sendMessage(message1);
+        Sleep(200);
+        QByteArray *message = new QByteArray("Start", 5);
+        emit sendMessage(message);
         ui->stopButton->setText("Stop");
     }
     else {
-        emit sendMessage("Stop", 4);
+        QByteArray *message = new QByteArray("Stop", 4);
+        emit sendMessage(message);
         ui->stopButton->setText("Start");
     }
     isStopped = !isStopped;
+    emit changeStopState(isStopped);
+}
+
+void MainWindow::addPort(QList<QString> *names) {
+    bool *toRemove = reinterpret_cast<bool*>(malloc(sizeof(bool)*ui->comPorts->count()));
+    //QString currentText = ui->comPorts->currentText();
+    for(int i = 0; i < ui->comPorts->count(); i++) {
+        toRemove[i] = true;
+        for(int j = 0; j < names->length(); j++) {
+            if(ui->comPorts->itemText(i).compare(names->at(j)) == 0) {
+                toRemove[i] = false;
+                names->removeAt(j);
+                break;
+            }
+        }
+    }
+    for(int i = ui->comPorts->count() - 1; i >= 0; i--) {
+        if(toRemove[i]) {
+            ui->comPorts->removeItem(i);
+        }
+    }
+    for(int i = 0; i < names->length(); i++) {
+        ui->comPorts->addItem(names->at(i));
+    }
+    /*
+    if(toRemove[ui->comPorts->currentIndex()]) {
+        emit changeStopState(true);
+        emit changePorts(ui->comPorts->currentText());
+        ui->stopButton->setText("Start");
+        isStopped = true;
+    }
+    */
+    free(toRemove);
+    free(names);
+}
+/*
+void MainWindow::removePort(QString comPort) {
+    for(int i = 0; i < ui->comPorts->count(); i++) {
+        if(ui->comPorts->itemText(i).compare(comPort) == 0) {
+            ui->comPorts->removeItem(i);
+            return;
+        }
+    }
+}
+*/
+
+void MainWindow::on_comPorts_currentIndexChanged(const QString &arg1) {
+    emit changePorts(arg1);
+    emit changeStopState(true);
+    ui->stopButton->setText("Start");
+    isStopped = true;
 }
