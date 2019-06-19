@@ -55,7 +55,7 @@ private slots:
 
     void parametricRange();
 
-    void scaleValueAxisInKey(double minKey, double maxKey, double underScale = 1.0, double overScale = 1.0);
+    void scaleValueAxisInKey(double minKey, double maxKey, QCustomPlot *targetPlot, double underScale = 1.10, double overScale = 1.10);
 
     void updateGraphVectorSize();
 
@@ -77,6 +77,10 @@ private slots:
 
     void on_comPorts_currentIndexChanged(const QString &arg1);
 
+    void updatePermanentGraphs();
+
+    void on_pushButton_clicked();
+
 signals:
     void sendMessage(QByteArray *message);
 
@@ -85,12 +89,16 @@ signals:
     void changePorts(QString name);
 
     void changeStopState(bool state);
+
+    void flushRadio();
 private:
     Ui::MainWindow *ui;
     QCPCurve *timeGraph, *latitudeGraph, *longitudeGraph,  *gpsAltitudeGraph, *gpsSpeedGraph, *xAccelerationGraph, *yAccelerationGraph,
     *zAccelerationGraph, *xOrientationGraph, *yOrientationGraph, *zOrientationGraph, *xAngularVelocityGraph, *yAngularVelocityGraph,
     *zAngularVelocityGraph, *xMagneticFieldGraph, *yMagneticFieldGraph, *zMagneticFieldGraph, *temperatureGraph, *pressureGraph,
-    *altimeterAltitudeGraph, *humidityGraph;
+    *altimeterAltitudeGraph, *humidityGraph, *dedicatedXAccelerationGraph, *dedicatedYAccelerationGraph, *dedicatedZAccelerationGraph,
+    *dedicatedLongitudeGraph, *dedicatedXAngularVelocityGraph, *dedicatedYAngularVelocityGraph, *dedicatedZAngularVelocityGraph,
+    *dedicatedXOrientationGraph, *dedicatedYOrientationGraph, *dedicatedZOrientationGraph;
     QCustomPlot *plot;
     long int length = 100;
     QVector<double> time, latitude, longitude, gpsAltitude, gpsSpeed, xAcceleration, yAcceleration, zAcceleration, xOrientation,
@@ -111,6 +119,9 @@ private:
     float initSecond;
     int initMinute, initHour, initDay, initMonth;
     bool isAsleep = false, isStopped = true;
+    bool reset = false;
+    double velocity[3] = {0, 0, 0};
+    bool calibrate = false;
     //QVector<QPen> colors = {QPen(Qt::red), QPen(Qt::blue), QPen(Qt::black), QPen(Qt::gray), QPen(Qt::green), QPen(Qt::magenta), QPen(Qt::)};
 };
 

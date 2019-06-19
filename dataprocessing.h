@@ -19,10 +19,14 @@ public slots:
     void changePort(QString name);
 
     void changeStopState(bool state);
+
+    void flush();
 private slots:
     void enumeratePorts();
 
     void radioUnplugged(QSerialPort::SerialPortError error);
+
+    void start();
 signals:
     void updateGraphData(QList<double>* data);
 
@@ -31,7 +35,7 @@ private:
     QSerialPortInfo radioInfo;
     QSerialPort *radio;
     QByteArray bufferedData;
-    QTimer *timer;
+    QTimer *timer, *startTimer;
     bool isStopped = true;
 };
 

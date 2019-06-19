@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1581</width>
-    <height>734</height>
+    <width>1779</width>
+    <height>743</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -820,7 +820,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
    </widget>
-   <widget class="QCustomPlot" name="AltitudeAcceleration" native="true">
+   <widget class="QCustomPlot" name="AngularVelocity" native="true">
     <property name="geometry">
      <rect>
       <x>740</x>
@@ -850,6 +850,51 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>660</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Timestamp">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>470</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 16pt &quot;Times New Roman&quot;;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timestamp: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LatLonText">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>530</y>
+      <width>161</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 16pt &quot;Times New Roman&quot;;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Latitude:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Longitude:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
    <zorder>graph</zorder>
    <zorder>rangeSelect</zorder>
    <zorder>xMinText</zorder>
@@ -873,16 +918,19 @@ p, li { white-space: pre-wrap; }
    <zorder>stopButton</zorder>
    <zorder>comPorts</zorder>
    <zorder>LatitudeLongitude</zorder>
-   <zorder>AltitudeAcceleration</zorder>
+   <zorder>AngularVelocity</zorder>
    <zorder>Acceleration</zorder>
    <zorder>Orientation</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>Timestamp</zorder>
+   <zorder>LatLonText</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1581</width>
+     <width>1779</width>
      <height>21</height>
     </rect>
    </property>
