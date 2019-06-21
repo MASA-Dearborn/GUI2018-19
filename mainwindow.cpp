@@ -12,6 +12,20 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     radioProcesser->moveToThread(radioThread);
+    QDateTime setTime = QDateTime();
+    //QDateTime current = QDateTime::currentDateTime();
+    //uint msecs = setTime.time().msecsTo(current.time());
+    QString name = QString("C:/Users/pr3de/Documents/Dab Data ") + QDateTime::currentDateTime().toString(Qt::ISODate).remove(13,6) + QString("-") + QDateTime::currentDateTime().toString(Qt::ISODate).remove(16,3).remove(0,14) + QString("-") + QDateTime::currentDateTime().toString(Qt::ISODate).remove(0,17) + QString(".csv");
+    spreadSheet = new QFile(name);
+    if(spreadSheet->open(QFile::WriteOnly|QFile::Truncate)) {
+        qDebug() << "works";
+        QTextStream output(spreadSheet);
+        output << "Timestamp,Latitude,Longitude,GPS Altitude,GPS Speed,X Acceleration,Y Acceleration,Z Acceleration,X Orientation,Y Orientation,Z Orientation,X Angular Velocity,Y Angular Velocity,Z Angular Velocity,X Magnetic Field,Y Magnetic Field,Z Magnetic Field,Temperature,Pressure,Altimeter Altitude,Humidity" ;
+    }
+    else {
+        qDebug() << "Fails";
+    }
+    spreadSheet->close();
     connect(radioThread, &QThread::finished, radioProcesser, &QObject::deleteLater);
     connect(radioProcesser, &DataProcessing::updateGraphData, this, &MainWindow::updateData);//, Qt::BlockingQueuedConnection);
     connect(this, &MainWindow::sendMessage, radioProcesser, &DataProcessing::sendMessage);
@@ -710,12 +724,12 @@ void MainWindow::updateData(QList<double>* data) {
     //close to previous timestamp accept it. If not, check if it's close to the
     //next timestamp. Ignore the first piece of data since there's nothing to
     //compare to.
-    qDebug() << "Update data\n";
+    qDebug() << "Data length: " << data->length() << "\n";
     double timeStamp;
+    QString timeStampString = ("Timestamp:\n" + QString::number(data->at(23)) + ":" + QString::number(data->at(22)) + ":" + QString::number(data->at(21)) + ":" + QString::number(data->at(0)));
     //qDebug() << "Update\n";
     if(graphEntries != 0) {
         timeStamp = (data->at(0) - initSecond) + 60*(data->at(21) - initMinute) + 3600*(data->at(22) - initHour) + 86400*(data->at(23) - initDay);
-        QString timeStampString = ("Timestamp:\n" + QString::number(data->at(23)) + ":" + QString::number(data->at(22)) + ":" + QString::number(data->at(21)) + ":" + QString::number(data->at(0)));
         ui->Timestamp->setText(timeStampString);
         ui->Timestamp->setFont(QFont("Times New Roman", 16));
         //qDebug() << timeStamp << "\n";
@@ -841,7 +855,25 @@ void MainWindow::updateData(QList<double>* data) {
                 dedicatedXOrientationGraph->addData(time[graphEntries], xOrientation[graphEntries]);
                 dedicatedYOrientationGraph->addData(time[graphEntries], yOrientation[graphEntries]);
                 dedicatedZOrientationGraph->addData(time[graphEntries], zOrientation[graphEntries]);
-
+                /*
+                if(spreadSheet->open(QFile::WriteOnly|QFile::Truncate)) {
+                    QTextStream output(spreadSheet);
+                    output << QString("\n") + QString::number(dubiousData->at(23)) + ":" + QString::number(dubiousData->at(22)) + ":" +
+                              QString::number(dubiousData->at(21)) + ":" + QString::number(dubiousData->at(0)) + QString("\t") +
+                              QString::number(latitude[graphEntries]) +
+                              QString("\t") + QString::number(longitude[graphEntries]) + QString("\t") + QString::number(gpsAltitude[graphEntries]) +
+                              QString("\t") + QString::number(gpsSpeed[graphEntries]) + QString("\t") + QString::number(xAcceleration[graphEntries]) +
+                              QString("\t") + QString::number(yAcceleration[graphEntries]) + QString("\t") + QString::number(zAcceleration[graphEntries]) +
+                              QString("\t") + QString::number(xOrientation[graphEntries]) + QString("\t") + QString::number(yOrientation[graphEntries]) +
+                              QString("\t") + QString::number(zOrientation[graphEntries]) + QString("\t") + QString::number(xAngularVelocity[graphEntries]) + \
+                              QString("\t") + QString::number(yAngularVelocity[graphEntries]) + QString("\t") +
+                              QString::number(zAngularVelocity[graphEntries]) + QString("\t") + QString::number(xMagneticField[graphEntries]) +
+                              QString("\t") + QString::number(yMagneticField[graphEntries]) + QString("\t") + QString::number(zMagneticField[graphEntries]) +
+                              QString("\t") + QString::number(temperature[graphEntries]) + QString("\t") + QString::number(pressure[graphEntries]) +
+                              QString("\t") + QString::number(altimeterAltitude[graphEntries]) + QString("\t") + QString::number(humidity[graphEntries]);
+                    spreadSheet->close();
+                }
+                */
                 velocity[0] += (time[graphEntries] - time[graphEntries - 1])*(xAcceleration[graphEntries - 1] + xAcceleration[graphEntries])/2;
                 velocity[1] += (time[graphEntries] - time[graphEntries - 1])*(yAcceleration[graphEntries - 1] + yAcceleration[graphEntries])/2;
                 velocity[2] += (time[graphEntries] - time[graphEntries - 1])*(zAcceleration[graphEntries - 1] + zAcceleration[graphEntries])/2;
@@ -855,7 +887,7 @@ void MainWindow::updateData(QList<double>* data) {
         initMinute = data->at(21);
         initHour   = data->at(22);
         initDay    = data->at(23);
-        initMonth  = data->at(24);
+        //initMonth  = data->at(24);
         timeStamp  = 0;
     }
     //qDebug() << timeStamp << "\n";
@@ -933,6 +965,23 @@ void MainWindow::updateData(QList<double>* data) {
     QString latitudeLongitudeString = "Latitude:\n" + QString::number(latitude[graphEntries]) + "\nLongitude:\n" + QString::number(longitude[graphEntries]);
     ui->LatLonText->setText(latitudeLongitudeString);
     //ui->Acceleration->replot();
+
+    if(spreadSheet->open(QFile::WriteOnly|QFile::Append)) {
+        QTextStream output(spreadSheet);
+        output << QString("\n2019:06:") + QString::number(data->at(23)) + ":" + QString::number(data->at(22)) + ":" + QString::number(data->at(21)) +
+                  ":" + QString::number(data->at(0)) + QString(",") + QString::number(latitude[graphEntries]) +
+                  QString(",") + QString::number(longitude[graphEntries]) + QString(",") + QString::number(gpsAltitude[graphEntries]) +
+                  QString(",") + QString::number(gpsSpeed[graphEntries]) + QString(",") + QString::number(xAcceleration[graphEntries]) +
+                  QString(",") + QString::number(yAcceleration[graphEntries]) + QString(",") + QString::number(zAcceleration[graphEntries]) +
+                  QString(",") + QString::number(xOrientation[graphEntries]) + QString(",") + QString::number(yOrientation[graphEntries]) +
+                  QString(",") + QString::number(zOrientation[graphEntries]) + QString(",") + QString::number(xAngularVelocity[graphEntries]) +
+                  QString(",") + QString::number(yAngularVelocity[graphEntries]) + QString(",") +
+                  QString::number(zAngularVelocity[graphEntries]) + QString(",") + QString::number(xMagneticField[graphEntries]) +
+                  QString(",") + QString::number(yMagneticField[graphEntries]) + QString(",") + QString::number(zMagneticField[graphEntries]) +
+                  QString(",") + QString::number(temperature[graphEntries]) + QString(",") + QString::number(pressure[graphEntries]) +
+                  QString(",") + QString::number(altimeterAltitude[graphEntries]) + QString(",") + QString::number(humidity[graphEntries]);
+        spreadSheet->close();
+    }
 
     ++graphEntries;
     if(graphEntries > 1)
@@ -1317,4 +1366,86 @@ void MainWindow::updatePermanentGraphs() {
 
 void MainWindow::on_pushButton_clicked() {
     emit flushRadio();
+}
+
+void MainWindow::on_actionImport_2_triggered() {
+    QString fileName = QFileDialog::getOpenFileName(this,
+            tr("Open Saved Data"), "",
+            tr("Spreadsheet (*.csv);;All Files (*)"));
+    if (fileName.isEmpty())
+            return;
+        else {
+
+            QFile file(fileName);
+
+            if (!file.open(QIODevice::ReadOnly)) {
+                QMessageBox::information(this, tr("Unable to open file"),
+                    file.errorString());
+                return;
+            }
+
+            QTextStream in(&file); //Header length is 295
+            //in.setVersion(QDataStream::Qt_4_5);
+
+            //QString output;
+            //in >> output;
+            QString spreadSheetData = in.readAll();
+            QStringRef subString(&spreadSheetData, 0, 295);
+            if(subString == QString("Timestamp,Latitude,Longitude,GPS Altitude,GPS Speed,X Acceleration,Y Acceleration,Z Acceleration,X Orientation,Y Orientation,Z Orientation,X Angular Velocity,Y Angular Velocity,Z Angular Velocity,X Magnetic Field,Y Magnetic Field,Z Magnetic Field,Temperature,Pressure,Altimeter Altitude,Humidity")) {
+                spreadSheetData.remove(0,296);
+
+                while(spreadSheetData.length() > 0) {
+                    QList<double> *data = new QList<double>();
+                    int timeData[3];
+                    for(int i = 0;; i++) {
+                        if(i >= spreadSheetData.length()) {
+                            return;
+                        }
+                        QStringRef separators(&spreadSheetData, i, 1);
+                        //if(separators == QString(",")) {
+                            if(spreadSheetData.at(i) == QString(",")) {
+                                qDebug() << "Seperator\n";
+                                if(data->length() == 0) {
+                                    //spreadSheetData.remove(0,8);
+                                    QStringRef days(&spreadSheetData, 8, 2);
+                                    QStringRef hours(&spreadSheetData, 11, 2);
+                                    QStringRef minutes(&spreadSheetData, 14, 2);
+                                    QStringRef seconds(&spreadSheetData, 17, i - 17);
+                                    data->append(seconds.toDouble());
+                                    timeData[0] = minutes.toInt();
+                                    timeData[1] = hours.toInt();
+                                    timeData[2] = days.toInt();
+                                }
+                                else {
+                                    QStringRef newData(&spreadSheetData, 0, i);
+                                    data->append(newData.toDouble());
+                                }
+                                spreadSheetData.remove(0, i + 1);
+                                i = 0;
+                            }
+                            else if(spreadSheetData.at(i) == QString("\n")) {
+                                qDebug() << "Seperator n\n";
+                                QStringRef newData(&spreadSheetData, 0, i);
+                                data->append(newData.toDouble());
+                                data->append(timeData[0]);
+                                data->append(timeData[1]);
+                                data->append(timeData[2]);
+                                spreadSheetData.remove(0, i + 1);
+                                if(data->length() == 24) {
+                                    updateData(data);
+                                    break;
+                                }
+                                else {
+                                    free(data);
+                                    break;
+                                }
+                            }
+                        //}
+                    }
+                }
+
+            }
+            qDebug() << spreadSheetData; //Header length is 295
+
+    }
 }

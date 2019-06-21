@@ -81,6 +81,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_actionImport_2_triggered();
+
 signals:
     void sendMessage(QByteArray *message);
 
@@ -122,6 +124,7 @@ private:
     bool reset = false;
     double velocity[3] = {0, 0, 0};
     bool calibrate = false;
+    QFile *spreadSheet;
     //QVector<QPen> colors = {QPen(Qt::red), QPen(Qt::blue), QPen(Qt::black), QPen(Qt::gray), QPen(Qt::green), QPen(Qt::magenta), QPen(Qt::)};
 };
 
