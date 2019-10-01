@@ -12,12 +12,19 @@
 - Graph data based on time instead of domain
 - Color code plots and add legend
 - Real time data processing
-#### Unfinished Features
 - Graph the last x seconds of data
 - Multithreaded data processing
-#### Planned Features
 - Include secondary graphs to permanently display important information
-- Throw display information to secondary application for display on multiple devices
+#### Unfinished Features
+
+#### Planned Features
+- Clean code
+- Configuration files
+- CRC error checking
+- Integrate wtih remote server
+- Nice UI
+- Integrate with COTS GPS
+- Integrate with live video
 
 ## Installation
 1. [Download Qt](https://www.qt.io/download-qt-installer?hsCtaTracking=9f6a2170-a938-42df-a8e2-a9f0b1d6cdce%7C6cb0de4f-9bb5-4778-ab02-bfb62735f3e5)
