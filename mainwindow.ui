@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>397</width>
-    <height>515</height>
+    <width>1779</width>
+    <height>743</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>361</width>
-      <height>251</height>
+      <width>691</width>
+      <height>451</height>
      </rect>
     </property>
    </widget>
@@ -28,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>290</y>
+      <y>500</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -38,7 +38,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>290</y>
+      <y>500</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -48,7 +48,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>340</y>
+      <y>550</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -58,7 +58,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>340</y>
+      <y>550</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -68,29 +68,114 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>290</y>
+      <y>500</y>
       <width>211</width>
       <height>22</height>
      </rect>
     </property>
     <item>
      <property name="text">
-      <string>t</string>
+      <string>Time</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>x1</string>
+      <string>Latitude</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>x2</string>
+      <string>Longitude</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>x3</string>
+      <string>GPS Altitude</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>GPS Speed</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Acceleration</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Acceleration</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Acceleration</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Orientation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Orientation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Orientation</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Angular Velocity</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Angular Velocity</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Angular Velocity</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Magnetic Field</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Magnetic Field</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Magnetic Field</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Temperature</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Pressure</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Altimeter Altitude</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Humidity</string>
      </property>
     </item>
    </widget>
@@ -98,7 +183,7 @@
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>360</y>
+      <y>530</y>
       <width>211</width>
       <height>61</height>
      </rect>
@@ -178,7 +263,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>390</y>
+      <y>600</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -188,7 +273,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>390</y>
+      <y>600</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -201,7 +286,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>270</y>
+      <y>480</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -236,7 +321,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>270</y>
+      <y>480</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -265,7 +350,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>320</y>
+      <y>530</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -294,7 +379,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>320</y>
+      <y>530</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -323,7 +408,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>370</y>
+      <y>580</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -352,7 +437,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>370</y>
+      <y>580</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -381,7 +466,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>170</x>
-      <y>270</y>
+      <y>480</y>
       <width>211</width>
       <height>31</height>
      </rect>
@@ -403,189 +488,11 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;x axis&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="graphEnable">
-    <property name="geometry">
-     <rect>
-      <x>170</x>
-      <y>320</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border:none</string>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QCheckBox" name="t">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>21</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="layoutDirection">
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QTextBrowser" name="tText">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgba(0,0,0,0%)</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;t&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="x1">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>10</y>
-       <width>21</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="x2">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>10</y>
-       <width>21</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="x3">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>10</y>
-       <width>21</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QTextBrowser" name="x1Text">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>0</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgba(0,0,0,0%)</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;x1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QTextBrowser" name="x2Text">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>0</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgba(0,0,0,0%)</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;x2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QTextBrowser" name="x3Text">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>0</y>
-       <width>31</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgba(0,0,0,0%)</string>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="html">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;x3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-   </widget>
    <widget class="QDoubleSpinBox" name="recentTime">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>440</y>
+      <y>650</y>
       <width>62</width>
       <height>22</height>
      </rect>
@@ -598,7 +505,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>420</y>
+      <y>630</y>
       <width>61</width>
       <height>31</height>
      </rect>
@@ -620,6 +527,374 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;recent&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="enableGraphs">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>480</y>
+      <width>161</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <item>
+     <property name="text">
+      <string>Time</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Latitude</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Longitude</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>GPS Altitude</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>GPS Speed</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Acceleration</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Acceleration</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Acceleration</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Orientation</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Orientation</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Orientation</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Angular Velocity</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Angular Velocity</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Angular Velocity</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>X Magnetic Field</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Y Magnetic Field</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Z Magnetic Field</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Temperature</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Pressure</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Altimeter Altitude</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Humidity</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+     <property name="flags">
+      <set>ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="sleepButton">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>630</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sleep</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="stopButton">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>630</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comPorts">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>600</y>
+      <width>211</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="LatitudeLongitude" native="true">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>10</y>
+      <width>401</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="AngularVelocity" native="true">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>350</y>
+      <width>401</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="Acceleration" native="true">
+    <property name="geometry">
+     <rect>
+      <x>1160</x>
+      <y>10</y>
+      <width>401</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCustomPlot" name="Orientation" native="true">
+    <property name="geometry">
+     <rect>
+      <x>1160</x>
+      <y>350</y>
+      <width>401</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>660</y>
+      <width>101</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="Timestamp">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>470</y>
+      <width>161</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 16pt &quot;Times New Roman&quot;;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Timestamp: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="LatLonText">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>530</y>
+      <width>161</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 16pt &quot;Times New Roman&quot;;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Latitude:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Longitude:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
    <zorder>graph</zorder>
    <zorder>rangeSelect</zorder>
    <zorder>xMinText</zorder>
@@ -636,19 +911,36 @@ p, li { white-space: pre-wrap; }
    <zorder>parametricMin</zorder>
    <zorder>xAxis</zorder>
    <zorder>horizontalAxis</zorder>
-   <zorder>graphEnable</zorder>
    <zorder>tMinText_2</zorder>
    <zorder>recentTime</zorder>
+   <zorder>enableGraphs</zorder>
+   <zorder>sleepButton</zorder>
+   <zorder>stopButton</zorder>
+   <zorder>comPorts</zorder>
+   <zorder>LatitudeLongitude</zorder>
+   <zorder>AngularVelocity</zorder>
+   <zorder>Acceleration</zorder>
+   <zorder>Orientation</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>Timestamp</zorder>
+   <zorder>LatLonText</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>397</width>
+     <width>1779</width>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionImport_2"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -659,6 +951,16 @@ p, li { white-space: pre-wrap; }
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionImport">
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </action>
+  <action name="actionImport_2">
+   <property name="text">
+    <string>Import</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

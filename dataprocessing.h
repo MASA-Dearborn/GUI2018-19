@@ -11,17 +11,32 @@ class DataProcessing : public QObject
 
 public:
     DataProcessing();
-
 public slots:
     void readData();
 
-signals:
-    void updateGraphData(QList<double>* data, short minutes, short hours);
+    void sendMessage(QByteArray *message);
 
+    void changePort(QString name);
+
+    void changeStopState(bool state);
+
+    void flush();
+private slots:
+    void enumeratePorts();
+
+    void radioUnplugged(QSerialPort::SerialPortError error);
+
+    void start();
+signals:
+    void updateGraphData(QList<double>* data);
+
+    void addPort(QList<QString> *names);
 private:
     QSerialPortInfo radioInfo;
     QSerialPort *radio;
     QByteArray bufferedData;
+    QTimer *timer, *startTimer;
+    bool isStopped = true;
 };
 
 #endif // DataProcessing_H

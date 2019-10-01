@@ -18,8 +18,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 public slots:
-    void updateData(QList<double>* data, short minutes, short hours);
+    void updateData(QList<double>* data);
 
+    void addPort(QList<QString> *names);
+
+    //void removePort(QList<QString> *names);
 private slots:
 
     void on_horizontalAxis_activated(int index);
@@ -44,14 +47,6 @@ private slots:
 
     void updateGraph();
 
-    void on_t_clicked(bool checked);
-
-    void on_x1_clicked(bool checked);
-
-    void on_x2_clicked(bool checked);
-
-    void on_x3_clicked(bool checked);
-
     void on_parametric_toggled(bool checked);
 
     void on_parametricMin_valueChanged();
@@ -60,7 +55,7 @@ private slots:
 
     void parametricRange();
 
-    void scaleValueAxisInKey(double minKey, double maxKey, double underScale = 1.0, double overScale = 1.0);
+    void scaleValueAxisInKey(double minKey, double maxKey, QCustomPlot *targetPlot, double underScale = 1.10, double overScale = 1.10);
 
     void updateGraphVectorSize();
 
@@ -74,12 +69,43 @@ private slots:
 
     void on_recentTime_valueChanged();
 
+    void on_enableGraphs_itemChanged(QListWidgetItem *item);
+
+    void on_sleepButton_clicked();
+
+    void on_stopButton_clicked();
+
+    void on_comPorts_currentIndexChanged(const QString &arg1);
+
+    void updatePermanentGraphs();
+
+    void on_pushButton_clicked();
+
+    void on_actionImport_2_triggered();
+
+signals:
+    void sendMessage(QByteArray *message);
+
+    void enumeratePorts();
+
+    void changePorts(QString name);
+
+    void changeStopState(bool state);
+
+    void flushRadio();
 private:
     Ui::MainWindow *ui;
-    QCPCurve *x1Graph, *x2Graph, *x3Graph, *tGraph;
+    QCPCurve *timeGraph, *latitudeGraph, *longitudeGraph,  *gpsAltitudeGraph, *gpsSpeedGraph, *xAccelerationGraph, *yAccelerationGraph,
+    *zAccelerationGraph, *xOrientationGraph, *yOrientationGraph, *zOrientationGraph, *xAngularVelocityGraph, *yAngularVelocityGraph,
+    *zAngularVelocityGraph, *xMagneticFieldGraph, *yMagneticFieldGraph, *zMagneticFieldGraph, *temperatureGraph, *pressureGraph,
+    *altimeterAltitudeGraph, *humidityGraph, *dedicatedXAccelerationGraph, *dedicatedYAccelerationGraph, *dedicatedZAccelerationGraph,
+    *dedicatedLongitudeGraph, *dedicatedXAngularVelocityGraph, *dedicatedYAngularVelocityGraph, *dedicatedZAngularVelocityGraph,
+    *dedicatedXOrientationGraph, *dedicatedYOrientationGraph, *dedicatedZOrientationGraph;
     QCustomPlot *plot;
     long int length = 100;
-    QVector<double> x1, x2, x3, t, *key;
+    QVector<double> time, latitude, longitude, gpsAltitude, gpsSpeed, xAcceleration, yAcceleration, zAcceleration, xOrientation,
+    yOrientation, zOrientation, xAngularVelocity, yAngularVelocity, zAngularVelocity, xMagneticField, yMagneticField, zMagneticField,
+    temperature, pressure, altimeterAltitude, humidity, *key;
     long int graphEntries = 0;
     DataProcessing *radioProcesser = new DataProcessing();
     QThread *radioThread = new QThread();
@@ -92,6 +118,14 @@ private:
     int parametricMin = -1, parametricMax = -1;
     QList<double>* dubiousData = NULL;
     double sampleSize = 0.05;
+    float initSecond;
+    int initMinute, initHour, initDay, initMonth;
+    bool isAsleep = false, isStopped = true;
+    bool reset = false;
+    double velocity[3] = {0, 0, 0};
+    bool calibrate = false;
+    QFile *spreadSheet;
+    //QVector<QPen> colors = {QPen(Qt::red), QPen(Qt::blue), QPen(Qt::black), QPen(Qt::gray), QPen(Qt::green), QPen(Qt::magenta), QPen(Qt::)};
 };
 
 #endif // MAINWINDOW_H
