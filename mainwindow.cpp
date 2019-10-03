@@ -34,77 +34,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::changeStopState, radioProcesser, &DataProcessing::changeStopState);
     connect(this, &MainWindow::flushRadio, radioProcesser, &DataProcessing::flush);
     radioThread->start();
-    //emit enumeratePorts();
-    time.resize(length);
-    latitude.resize(length);
-    longitude.resize(length);
-    gpsAltitude.resize(length);
-    gpsSpeed.resize(length);
-    xAcceleration.resize(length);
-    yAcceleration.resize(length);
-    zAcceleration.resize(length);
-    xOrientation.resize(length);
-    yOrientation.resize(length);
-    zOrientation.resize(length);
-    xAngularVelocity.resize(length);
-    yAngularVelocity.resize(length);
-    zAngularVelocity.resize(length);
-    xMagneticField.resize(length);
-    yMagneticField.resize(length);
-    zMagneticField.resize(length);
-    temperature.resize(length);
-    pressure.resize(length);
-    altimeterAltitude.resize(length);
-    humidity.resize(length);
-    //Attach plot to ui and add graphs to it
-    plot                   = ui->graph;
-    timeGraph              = new QCPCurve(plot->xAxis, plot->yAxis);
-    latitudeGraph          = new QCPCurve(plot->xAxis, plot->yAxis);
-    longitudeGraph         = new QCPCurve(plot->xAxis, plot->yAxis);
-    gpsAltitudeGraph       = new QCPCurve(plot->xAxis, plot->yAxis);
-    gpsSpeedGraph          = new QCPCurve(plot->xAxis, plot->yAxis);
-    xAccelerationGraph     = new QCPCurve(plot->xAxis, plot->yAxis);
-    yAccelerationGraph     = new QCPCurve(plot->xAxis, plot->yAxis);
-    zAccelerationGraph     = new QCPCurve(plot->xAxis, plot->yAxis);
-    xOrientationGraph      = new QCPCurve(plot->xAxis, plot->yAxis);
-    yOrientationGraph      = new QCPCurve(plot->xAxis, plot->yAxis);
-    zOrientationGraph      = new QCPCurve(plot->xAxis, plot->yAxis);
-    xAngularVelocityGraph  = new QCPCurve(plot->xAxis, plot->yAxis);
-    yAngularVelocityGraph  = new QCPCurve(plot->xAxis, plot->yAxis);
-    zAngularVelocityGraph  = new QCPCurve(plot->xAxis, plot->yAxis);
-    xMagneticFieldGraph    = new QCPCurve(plot->xAxis, plot->yAxis);
-    yMagneticFieldGraph    = new QCPCurve(plot->xAxis, plot->yAxis);
-    zMagneticFieldGraph    = new QCPCurve(plot->xAxis, plot->yAxis);
-    temperatureGraph       = new QCPCurve(plot->xAxis, plot->yAxis);
-    pressureGraph          = new QCPCurve(plot->xAxis, plot->yAxis);
-    altimeterAltitudeGraph = new QCPCurve(plot->xAxis, plot->yAxis);
-    humidityGraph          = new QCPCurve(plot->xAxis, plot->yAxis);
 
-    timeGraph->setVisible(false);
-    latitudeGraph->setVisible(false);
-    longitudeGraph->setVisible(false);
-    gpsAltitudeGraph->setVisible(false);
-    gpsSpeedGraph->setVisible(false);
-    xAccelerationGraph->setVisible(false);
-    yAccelerationGraph->setVisible(false);
-    zAccelerationGraph->setVisible(false);
-    xOrientationGraph->setVisible(false);
-    yOrientationGraph->setVisible(false);
-    zOrientationGraph->setVisible(false);
-    xAngularVelocityGraph->setVisible(false);
-    yAngularVelocityGraph->setVisible(false);
-    zAngularVelocityGraph->setVisible(false);
-    xMagneticFieldGraph->setVisible(false);
-    yMagneticFieldGraph->setVisible(false);
-    zMagneticFieldGraph->setVisible(false);
-    temperatureGraph->setVisible(false);
-    pressureGraph->setVisible(false);
-    altimeterAltitudeGraph->setVisible(false);
-    humidityGraph->setVisible(false);
+    plot = ui->graph;
 
-    //Set the x axis (key) to a dataset
-    key = &time;
-    //Give the x axis a label
     ui->graph->xAxis->setLabel("Time");
     //Set axes ranges and min/max available range
     ui->graph->xAxis->setRange(-1, 1);
@@ -122,63 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->yMax->setValue(10);
     ui->parametricMin->setValue(0);
     ui->parametricMax->setValue(1);
-    //Finish setting up plots and graph them
-    timeGraph->setName("Time");
-    latitudeGraph->setName("Latitude");
-    longitudeGraph->setName("Longitude");
-    gpsAltitudeGraph->setName("GPS Altitude");
-    gpsSpeedGraph->setName("GPS Speed");
-    xAccelerationGraph->setName("X Acceleration");
-    yAccelerationGraph->setName("Y Acceleration");
-    zAccelerationGraph->setName("Z Acceleration");
-    xOrientationGraph->setName("X Orientation");
-    yOrientationGraph->setName("Y Orientation");
-    zOrientationGraph->setName("Z Orientation");
-    xAngularVelocityGraph->setName("X Angular Velocity");
-    yAngularVelocityGraph->setName("Y Angular Velocity");
-    zAngularVelocityGraph->setName("Z Angular Velocity");
-    xMagneticFieldGraph->setName("X Magnetic Field");
-    yMagneticFieldGraph->setName("Y Magnetic Field");
-    zMagneticFieldGraph->setName("Z Magnetic Field");
-    temperatureGraph->setName("Temperature");
-    pressureGraph->setName("Pressure");
-    altimeterAltitudeGraph->setName("Altimeter Altitude");
-    humidityGraph->setName("Humidity");
 
-    timeGraph->setPen(QPen(Qt::blue));
-    latitudeGraph->setPen(QPen(Qt::red));
-    longitudeGraph->setPen(QPen(Qt::green));
-    gpsAltitudeGraph->setPen(QPen(Qt::yellow));
-    gpsSpeedGraph->setPen(QPen(Qt::magenta));
-    xAccelerationGraph->setPen(QPen(Qt::black));
-    yAccelerationGraph->setPen(QPen(Qt::gray));
-    zAccelerationGraph->setPen(QPen(Qt::cyan));
-    xOrientationGraph->setPen(QPen(QColor(255, 0, 255)));
-    yOrientationGraph->setPen(QPen(QColor(173,251,37)));
-    zOrientationGraph->setPen(QPen(QColor(74,37,180)));
-    xAngularVelocityGraph->setPen(QPen(QColor(68,222,97)));
-    yAngularVelocityGraph->setPen(QPen(QColor(169,25,236)));
-    zAngularVelocityGraph->setPen(QPen(QColor(156,38,92)));
-    xMagneticFieldGraph->setPen(QPen(QColor(15,64,100)));
-    yMagneticFieldGraph->setPen(QPen(QColor(68,147,95)));
-    zMagneticFieldGraph->setPen(QPen(QColor(234,122,222)));
-    temperatureGraph->setPen(QPen(QColor(054,66,222)));
-    pressureGraph->setPen(QPen(QColor(94,35,88)));
-    altimeterAltitudeGraph->setPen(QPen(QColor(110,230,129)));
-    humidityGraph->setPen(QPen(QColor(74,129,222)));
-
-
-    /*
-    tGraph->setPen(QPen(Qt::blue));
-    x1Graph->setPen(QPen(Qt::red));
-    x2Graph->setPen(QPen(Qt::green));
-    x3Graph->setPen(QPen(Qt::black));
-    //plot->plotLayout()->addElement(0, 1, plot->legend);
-    tGraph->setName("t");
-    x1Graph->setName("x1");
-    x2Graph->setName("x2");
-    x3Graph->setName("x3");
-    */
     //Place legend along bottom of the plot instead of in the corner
     QCPLayoutGrid *subLayout = new QCPLayoutGrid;
 
@@ -192,27 +68,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //Set legend's row stretch factor very small so it ends up with minimum height
     //plot->plotLayout()->setRowStretchFactor(1, 0.001);
     plot->legend->setVisible(true);
-    timeGraph->removeFromLegend();
-    latitudeGraph->removeFromLegend();
-    longitudeGraph->removeFromLegend();
-    gpsAltitudeGraph->removeFromLegend();
-    gpsSpeedGraph->removeFromLegend();
-    xAccelerationGraph->removeFromLegend();
-    yAccelerationGraph->removeFromLegend();
-    zAccelerationGraph->removeFromLegend();
-    xOrientationGraph->removeFromLegend();
-    yOrientationGraph->removeFromLegend();
-    zOrientationGraph->removeFromLegend();
-    xAngularVelocityGraph->removeFromLegend();
-    yAngularVelocityGraph->removeFromLegend();
-    zAngularVelocityGraph->removeFromLegend();
-    xMagneticFieldGraph->removeFromLegend();
-    yMagneticFieldGraph->removeFromLegend();
-    zMagneticFieldGraph->removeFromLegend();
-    temperatureGraph->removeFromLegend();
-    pressureGraph->removeFromLegend();
-    altimeterAltitudeGraph->removeFromLegend();
-    humidityGraph->removeFromLegend();
 
     dedicatedXAccelerationGraph       = new QCPCurve(ui->Acceleration->xAxis, ui->Acceleration->yAxis);
     dedicatedYAccelerationGraph       = new QCPCurve(ui->Acceleration->xAxis, ui->Acceleration->yAxis);
@@ -299,114 +154,37 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_horizontalAxis_activated(int index) {
-    //Check which option was selected and set the x axis accordingly
-    switch (index) {
-    case 0 :
-        key = &time;
-        ui->graph->xAxis->setLabel("Time");
-        break;
+void MainWindow::initializeMainPlot() {
 
-    case 1 :
-        key = &latitude;
-        ui->graph->xAxis->setLabel("Latitude");
-        break;
+}
 
-    case 2 :
-        key = &longitude;
-        ui->graph->xAxis->setLabel("Longitude");
-        break;
+void MainWindow::initializeDataGraphs(QJsonArray graphParams) {
+    for (int i = 0; i < graphParams.size(); i++) {
+        QJsonObject params = graphParams.at(i).toObject();
+        DataGraph graph;
 
-    case 3 :
-        key = &gpsAltitude;
-        ui->graph->xAxis->setLabel("GPS Altitude");
-        break;
+        graph.name = params.find("name")->toString();
+        graph.index = params.find("index")->toInt();
+        QJsonArray color = params.find("color")->toArray();
 
-    case 4 :
-        key = &gpsSpeed;
-        ui->graph->xAxis->setLabel("GPS Speed");
-        break;
+        graph.data.resize(length);
 
-    case 5 :
-        key = &xAcceleration;
-        ui->graph->xAxis->setLabel("X Acceleration");
-        break;
+        graph.curve = new QCPCurve(plot->xAxis, plot->yAxis);
+        graph.curve->setVisible(false);
+        graph.curve->setName(graph.name);
+        graph.curve->setPen(QPen(QColor(color.at(0).toInt(), color.at(1).toInt(), color.at(2).toInt())));
+        graph.curve->removeFromLegend();
 
-    case 6 :
-        key = &yAcceleration;
-        ui->graph->xAxis->setLabel("Y Acceleration");
-        break;
-
-    case 7 :
-        key = &zAcceleration;
-        ui->graph->xAxis->setLabel("Z Acceleration");
-        break;
-
-    case 8 :
-        key = &xOrientation;
-        ui->graph->xAxis->setLabel("X Orientation");
-        break;
-
-    case 9 :
-        key = &yOrientation;
-        ui->graph->xAxis->setLabel("Y Orientation");
-        break;
-
-    case 10 :
-        key = &zOrientation;
-        ui->graph->xAxis->setLabel("Z Orientation");
-        break;
-
-    case 11 :
-        key = &xAngularVelocity;
-        ui->graph->xAxis->setLabel("X Angular Velocity");
-        break;
-
-    case 12 :
-        key = &yAngularVelocity;
-        ui->graph->xAxis->setLabel("Y Angular Velocity");
-        break;
-
-    case 13 :
-        key = &zAngularVelocity;
-        ui->graph->xAxis->setLabel("Z Angular Velocity");
-        break;
-
-    case 14 :
-        key = &xMagneticField;
-        ui->graph->xAxis->setLabel("X Magnetic Field");
-        break;
-
-    case 15 :
-        key = &yMagneticField;
-        ui->graph->xAxis->setLabel("Y Magnetic Field");
-        break;
-
-    case 16 :
-        key = &zMagneticField;
-        ui->graph->xAxis->setLabel("Z Magnetic Field");
-        break;
-
-    case 17 :
-        key = &temperature;
-        ui->graph->xAxis->setLabel("Temperature");
-        break;
-
-    case 18 :
-        key = &pressure;
-        ui->graph->xAxis->setLabel("Pressure");
-        break;
-
-    case 19 :
-        key = &altimeterAltitude;
-        ui->graph->xAxis->setLabel("Altimeter Altitude");
-        break;
-
-    case 20 :
-        key = &humidity;
-        ui->graph->xAxis->setLabel("Humidity");
-        break;
+        graphs.append(graph);
     }
+
+    key = &graphs[0].data;
+}
+
+void MainWindow::on_horizontalAxis_activated(int index) {
+    key = &graphs[index].data;
+    ui->graph->xAxis->setLabel(graphs[index].name);
+
     updateGraph();
 }
 
@@ -440,41 +218,6 @@ void MainWindow::on_parametricMax_valueChanged() {
 void MainWindow::on_recentTime_valueChanged() {
     recentSize();
 }
-
-//Set each graph as either visible or hidden based on checkbox
-/*
-void MainWindow::on_t_clicked(bool checked) {
-    timeGraph->setVisible(checked);
-    autoSize();
-    parametricRange();
-    recentSize();
-    manualSize();
-}
-
-void MainWindow::on_x1_clicked(bool checked) {
-    x1Graph->setVisible(checked);
-    autoSize();
-    parametricRange();
-    recentSize();
-    manualSize();
-}
-
-void MainWindow::on_x2_clicked(bool checked) {
-    x2Graph->setVisible(checked);
-    autoSize();
-    parametricRange();
-    recentSize();
-    manualSize();
-}
-
-void MainWindow::on_x3_clicked(bool checked) {
-    x3Graph->setVisible(checked);
-    autoSize();
-    parametricRange();
-    recentSize();
-    manualSize();
-}
-*/
 
 void MainWindow::on_manualSize_toggled(bool checked) {
     //Set graph to manualsize
@@ -894,6 +637,7 @@ void MainWindow::updateData(QList<double>* data) {
     //Add current piece of data to main data vector because it
     //passed the corruption tests
     addData:
+    /*
     time[graphEntries]              = timeStamp;
     latitude[graphEntries]          = (*data)[1];
     longitude[graphEntries]         = (*data)[2];
@@ -915,8 +659,13 @@ void MainWindow::updateData(QList<double>* data) {
     pressure[graphEntries]          = (*data)[18];
     altimeterAltitude[graphEntries] = (*data)[19];
     humidity[graphEntries]          = (*data)[20];
+    */
 
-    //qDebug() << xAcceleration[graphEntries];
+    // Iterate the data and graphs to add data to individual lists
+    for (int i = 0; i < graphs.length(); i++) {
+        graphs[i].data.append((*data)[graphs[i].index]);
+        graphs[i].curve->addData((*key)[graphEntries], graphs[i].data[graphEntries]);
+    }
 
     //Free the data after it's added to the main vector to avoid memory leaks
     free(data);
@@ -1001,6 +750,7 @@ void MainWindow::updateData(QList<double>* data) {
 
 void MainWindow::updateGraph() {
     //Update each graph to the new key, and call the graph type functions to update it
+    /*
     timeGraph->setData(time.mid(0,graphEntries), (*key).mid(0,graphEntries), time.mid(0,graphEntries), true);
     latitudeGraph->setData(time.mid(0,graphEntries), (*key).mid(0,graphEntries), latitude.mid(0,graphEntries), true);
     longitudeGraph->setData(time.mid(0,graphEntries), (*key).mid(0,graphEntries), longitude.mid(0,graphEntries), true);
@@ -1022,6 +772,14 @@ void MainWindow::updateGraph() {
     pressureGraph->setData(time.mid(0,graphEntries), (*key).mid(0,graphEntries), pressure.mid(0,graphEntries), true);
     altimeterAltitudeGraph->setData(time.mid(0,graphEntries), (*key).mid(0,graphEntries), altimeterAltitude.mid(0,graphEntries), true);
     humidityGraph->setData(time.mid(0,graphEntries), (*key).mid(0,graphEntries), humidity.mid(0,graphEntries), true);
+    */
+
+    for (int i = 0; i < graphs.length(); i++) {
+        graphs[i].curve->setData(graphs[0].data.mid(0, graphEntries),
+                                 (*key).mid(0, graphEntries),
+                                 graphs[i].data.mid(0, graphEntries),
+                                 true);
+    }
 
     parametricRange();
     autoSize();
@@ -1031,219 +789,21 @@ void MainWindow::updateGraph() {
 
 //Doubles the size of all vectors
 void MainWindow::updateGraphVectorSize() {
-    time.resize(2*time.length());
-    latitude.resize(2*latitude.length());
-    longitude.resize(2*longitude.length());
-    gpsAltitude.resize(2*gpsAltitude.length());
-    gpsSpeed.resize(2*gpsSpeed.length());
-    xAcceleration.resize(2*xAcceleration.length());
-    yAcceleration.resize(2*yAcceleration.length());
-    zAcceleration.resize(2*zAcceleration.length());
-    xOrientation.resize(2*xOrientation.length());
-    yOrientation.resize(2*yOrientation.length());
-    zOrientation.resize(2*zOrientation.length());
-    xAngularVelocity.resize(2*xAngularVelocity.length());
-    yAngularVelocity.resize(2*yAngularVelocity.length());
-    zAngularVelocity.resize(2*zAngularVelocity.length());
-    xMagneticField.resize(2*xMagneticField.length());
-    yMagneticField.resize(2*yMagneticField.length());
-    zMagneticField.resize(2*zMagneticField.length());
-    temperature.resize(2*temperature.length());
-    pressure.resize(2*pressure.length());
-    altimeterAltitude.resize(2*altimeterAltitude.length());
-    humidity.resize(2*humidity.length());
-
+    for (int i = 0; i < graphs.length(); i++) {
+        graphs[i].data.resize(2 * graphs[i].data.length());
+    }
 }
 
 void MainWindow::on_enableGraphs_itemChanged(QListWidgetItem *item)
 {
-    if(item->text().compare("Time") == 0) {
-        timeGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            timeGraph->addToLegend();
-        }
-        else {
-            timeGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Latitude") == 0) {
-        latitudeGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            latitudeGraph->addToLegend();
-        }
-        else {
-            latitudeGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Longitude") == 0) {
-        longitudeGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            longitudeGraph->addToLegend();
-        }
-        else {
-            longitudeGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("GPS Altitude") == 0) {
-        gpsAltitudeGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            gpsAltitudeGraph->addToLegend();
-        }
-        else {
-            gpsAltitudeGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("GPS Speed") == 0) {
-        gpsSpeedGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            gpsSpeedGraph->addToLegend();
-        }
-        else {
-            gpsSpeedGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("X Acceleration") == 0) {
-        xAccelerationGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            xAccelerationGraph->addToLegend();
-        }
-        else {
-            xAccelerationGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Y Acceleration") == 0) {
-        yAccelerationGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            yAccelerationGraph->addToLegend();
-        }
-        else {
-            yAccelerationGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Z Acceleration") == 0) {
-        zAccelerationGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            zAccelerationGraph->addToLegend();
-        }
-        else {
-            zAccelerationGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("X Orientation") == 0) {
-        xOrientationGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            xOrientationGraph->addToLegend();
-        }
-        else {
-            xOrientationGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Y Orientation") == 0) {
-        yOrientationGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            yOrientationGraph->addToLegend();
-        }
-        else {
-            yOrientationGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Z Orientation") == 0) {
-        zOrientationGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            zOrientationGraph->addToLegend();
-        }
-        else {
-            zOrientationGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("X Angular Velocity") == 0) {
-        xAngularVelocityGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            xAngularVelocityGraph->addToLegend();
-        }
-        else {
-            xAngularVelocityGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Y Angular Velocity") == 0) {
-        yAngularVelocityGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            yAngularVelocityGraph->addToLegend();
-        }
-        else {
-            yAngularVelocityGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Z Angular Velocity") == 0) {
-        zAngularVelocityGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            zAngularVelocityGraph->addToLegend();
-        }
-        else {
-            zAngularVelocityGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("X Magnetic Field") == 0) {
-        xMagneticFieldGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            xMagneticFieldGraph->addToLegend();
-        }
-        else {
-            xMagneticFieldGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Y Magnetic Field") == 0) {
-        yMagneticFieldGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            yMagneticFieldGraph->addToLegend();
-        }
-        else {
-            yMagneticFieldGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Z Magnetic Field") == 0) {
-        zMagneticFieldGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            zMagneticFieldGraph->addToLegend();
-        }
-        else {
-            zMagneticFieldGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Temperature") == 0) {
-        temperatureGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            temperatureGraph->addToLegend();
-        }
-        else {
-            temperatureGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Pressure") == 0) {
-        pressureGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            pressureGraph->addToLegend();
-        }
-        else {
-            pressureGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Altimeter Altitude") == 0) {
-        altimeterAltitudeGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            altimeterAltitudeGraph->addToLegend();
-        }
-        else {
-            altimeterAltitudeGraph->removeFromLegend();
-        }
-    }
-    else if(item->text().compare("Humidity") == 0) {
-        humidityGraph->setVisible(item->checkState());
-        if(item->checkState()) {
-            humidityGraph->addToLegend();
-        }
-        else {
-            humidityGraph->removeFromLegend();
+    for (int i = 0; i < graphs.length(); i++) {
+        if (item->text().compare(graphs[i].name) == 0) {
+            graphs[i].curve->setVisible(item->checkState());
+            if (item->checkState()) {
+                graphs[i].curve->addToLegend();
+            } else {
+                graphs[i].curve->removeFromLegend();
+            }
         }
     }
 

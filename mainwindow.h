@@ -10,6 +10,13 @@ namespace Ui {
 class MainWindow;
 }
 
+struct DataGraph {
+    QCPCurve* curve;
+    QVector<double> data;
+    QString name;
+    int index;
+};
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -95,17 +102,31 @@ signals:
     void flushRadio();
 private:
     Ui::MainWindow *ui;
+
+    /*
     QCPCurve *timeGraph, *latitudeGraph, *longitudeGraph,  *gpsAltitudeGraph, *gpsSpeedGraph, *xAccelerationGraph, *yAccelerationGraph,
     *zAccelerationGraph, *xOrientationGraph, *yOrientationGraph, *zOrientationGraph, *xAngularVelocityGraph, *yAngularVelocityGraph,
     *zAngularVelocityGraph, *xMagneticFieldGraph, *yMagneticFieldGraph, *zMagneticFieldGraph, *temperatureGraph, *pressureGraph,
     *altimeterAltitudeGraph, *humidityGraph, *dedicatedXAccelerationGraph, *dedicatedYAccelerationGraph, *dedicatedZAccelerationGraph,
     *dedicatedLongitudeGraph, *dedicatedXAngularVelocityGraph, *dedicatedYAngularVelocityGraph, *dedicatedZAngularVelocityGraph,
     *dedicatedXOrientationGraph, *dedicatedYOrientationGraph, *dedicatedZOrientationGraph;
-    QCustomPlot *plot;
-    long int length = 100;
+    */
+
+    /*
     QVector<double> time, latitude, longitude, gpsAltitude, gpsSpeed, xAcceleration, yAcceleration, zAcceleration, xOrientation,
     yOrientation, zOrientation, xAngularVelocity, yAngularVelocity, zAngularVelocity, xMagneticField, yMagneticField, zMagneticField,
     temperature, pressure, altimeterAltitude, humidity, *key;
+    */
+
+    void initializeMainPlot();
+    void initializeDataGraphs(QJsonArray graphs);
+
+    QCustomPlot *plot;
+    long int length = 100;
+
+    QVector<DataGraph> graphs;
+    QVector<double>* key;
+
     long int graphEntries = 0;
     DataProcessing *radioProcesser = new DataProcessing();
     QThread *radioThread = new QThread();
