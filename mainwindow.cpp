@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //plot->plotLayout()->setRowStretchFactor(1, 0.001);
     plot->legend->setVisible(true);
 
+    /*
     dedicatedXAccelerationGraph       = new QCPCurve(ui->Acceleration->xAxis, ui->Acceleration->yAxis);
     dedicatedYAccelerationGraph       = new QCPCurve(ui->Acceleration->xAxis, ui->Acceleration->yAxis);
     dedicatedZAccelerationGraph       = new QCPCurve(ui->Acceleration->xAxis, ui->Acceleration->yAxis);
@@ -145,6 +146,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->->legend->setFillOrder(QCPLegend::foRowsFirst);
     //plot->legend->setWrap(11);
     //ui->Acceleration->ad
+    */
+
     updateGraph();
 }
 
@@ -295,14 +298,14 @@ void MainWindow::parametricRange() {
         if(maxTime < 0) {
             return;
         }
-        if(minTime > time[graphEntries - 1]) {
+        if(minTime > graphs[0].data[graphEntries - 1]) {
             return;
         }
         //Check if current indicies match times to some degree of accuracy
         //determined by epsilon. If they match then the window is already
         //sized appropriately and no change is needed. If they do not, continue.
         if(parametricMin >= 0 && parametricMax >= 0) {
-            if(abs(time[parametricMin] - minTime) < epsilon && abs(time[parametricMax] - maxTime) < epsilon) {
+            if(abs(graphs[0].data[parametricMin] - minTime) < epsilon && abs(graphs[0].data[parametricMax] - maxTime) < epsilon) {
                 return;
             }
         }
@@ -311,7 +314,7 @@ void MainWindow::parametricRange() {
         parametricMin = -1;
         parametricMax = -1;
         //Clamp inputs in case they are out of bounds
-        if(maxTime > time[graphEntries - 1]) {
+        if(maxTime > graphs[0].data[graphEntries - 1]) {
             parametricMax = graphEntries - 1;
         }
         if(minTime < 0) {
@@ -336,7 +339,7 @@ void MainWindow::recentSize() {
     if(axisMode == RECENT) {
         //If the target time is larger than the maximum time of the data, clamp
         //the input to showing all of the data instead
-        if(ui->recentTime->value() > time[graphEntries - 1]) {
+        if(ui->recentTime->value() > graphs[0].data[graphEntries - 1]) {
             axisMode = AUTO;
             autoSize();
             axisMode = RECENT;
@@ -344,7 +347,7 @@ void MainWindow::recentSize() {
         else {
             //Find the index of the given target time. If it is not found return,
             //if it is found scale the graph appropriately
-            int index = findTimeIndex(time[graphEntries - 1] - ui->recentTime->value());
+            int index = findTimeIndex(graphs[0].data[graphEntries - 1] - ui->recentTime->value());
             if(index == -1) { return; }
             //qDebug() << index << "\n";
             ui->graph->xAxis->setRange((*key)[index], (*key)[graphEntries - 1]);
@@ -358,12 +361,12 @@ int MainWindow::findTimeIndex(double targetTime) {
     //to be inaccurate
     if(newMean) { setNewMeanDeviation(); }
     //Check that the target time is within the dataset
-    if(targetTime < time[0] || targetTime > time[graphEntries -1]) { return -1; }
+    if(targetTime < graphs[0].data[0] || targetTime > graphs[0].data[graphEntries -1]) { return -1; }
     int minIndex, maxIndex;
     //Get initial guess at the minimum and maximum index of the target time
     //by using statistics
-    minIndex = graphEntries - (time[graphEntries - 1] - targetTime)/(mean - stdDeviation) - 2;
-    maxIndex = graphEntries - (time[graphEntries - 1] - targetTime)/(mean + stdDeviation);
+    minIndex = graphEntries - (graphs[0].data[graphEntries - 1] - targetTime)/(mean - stdDeviation) - 2;
+    maxIndex = graphEntries - (graphs[0].data[graphEntries - 1] - targetTime)/(mean + stdDeviation);
     //Ensure that the indices are valid. Only one that should ever be called is
     //the first one
     if(maxIndex >= graphEntries) { maxIndex = graphEntries - 1; }
@@ -383,10 +386,10 @@ int MainWindow::findTimeIndex(double targetTime) {
         if(maxIndex > (graphEntries - 1)) { maxIndex = graphEntries - 1; }
         if(minIndex > (graphEntries - 1)) { minIndex = graphEntries - 1; }
         //qDebug() << maxIndex << " " << minIndex << " " << (graphEntries - 1) << "\n";
-        if(targetTime <= time[maxIndex]) { break; }
+        if(targetTime <= graphs[0].data[maxIndex]) { break; }
         if(i > 4) { newMean = true; return -1; }
-        minIndex = graphEntries - (time[graphEntries - 1] - targetTime)/(mean + (i - 1)*stdDeviation) - 2;
-        maxIndex = graphEntries - (time[graphEntries - 1] - targetTime)/(mean + i*stdDeviation);
+        minIndex = graphEntries - (graphs[0].data[graphEntries - 1] - targetTime)/(mean + (i - 1)*stdDeviation) - 2;
+        maxIndex = graphEntries - (graphs[0].data[graphEntries - 1] - targetTime)/(mean + i*stdDeviation);
     }
     //qDebug() << "Started to find time\n";
     for(int i = 2;; i++) {
@@ -394,16 +397,16 @@ int MainWindow::findTimeIndex(double targetTime) {
         if(maxIndex < 0) { maxIndex = 0; }
         if(maxIndex > (graphEntries - 1)) { maxIndex = graphEntries - 1; newMean = true;}
         if(minIndex > (graphEntries - 1)) { minIndex = graphEntries - 1; newMean = true;}
-        if(targetTime >= time[minIndex]) { break; }
+        if(targetTime >= graphs[0].data[minIndex]) { break; }
         if(i > 4) { newMean = true; return -1; }
-        minIndex = graphEntries - (time[graphEntries - 1] - targetTime)/(mean - i*stdDeviation) - 2;
-        maxIndex = graphEntries - (time[graphEntries - 1] - targetTime)/(mean - (i - 1)*stdDeviation);
+        minIndex = graphEntries - (graphs[0].data[graphEntries - 1] - targetTime)/(mean - i*stdDeviation) - 2;
+        maxIndex = graphEntries - (graphs[0].data[graphEntries - 1] - targetTime)/(mean - (i - 1)*stdDeviation);
     }
     //qDebug() << "Almost found time\n";
     //Perform a binary search within the minimum and maximum
     //bounds that have been found
     while((maxIndex - minIndex) > 1) {
-        if(time[(minIndex + maxIndex)/2] < targetTime) {
+        if(graphs[0].data[(minIndex + maxIndex)/2] < targetTime) {
             minIndex = (minIndex + maxIndex)/2;
         }
         else {
@@ -423,7 +426,7 @@ void MainWindow::setNewMeanDeviation() {
     //Find random pieces of data and save to the sample array, then calculate mean
     for(int i = 0; i < sampleNum; i++) {
         int entry = rand() % (graphEntries - 1);
-        sampleData[i] = time[entry + 1] - time[entry];
+        sampleData[i] = graphs[0].data[entry + 1] - graphs[0].data[entry];
         mean += sampleData[i];
     }
     mean /= sampleNum;
@@ -472,158 +475,7 @@ void MainWindow::updateData(QList<double>* data) {
     QString timeStampString = ("Timestamp:\n" + QString::number(data->at(23)) + ":" + QString::number(data->at(22)) + ":" + QString::number(data->at(21)) + ":" + QString::number(data->at(0)));
     //qDebug() << "Update\n";
     if(graphEntries != 0) {
-        timeStamp = (data->at(0) - initSecond) + 60*(data->at(21) - initMinute) + 3600*(data->at(22) - initHour) + 86400*(data->at(23) - initDay);
-        ui->Timestamp->setText(timeStampString);
-        ui->Timestamp->setFont(QFont("Times New Roman", 16));
-        //qDebug() << timeStamp << "\n";
-        //Check of previous entry was tagged as possibly corrupt
-        if(timeStamp < 0) {
-            qDebug() << "Timestamp: " << timeStamp << " invalid timestamp: too small\n";
-            emit flushRadio();
-            free(data);
-            return;
-        }
-        if(reset && timeStamp < 20000) {
-            reset = false;
-            goto addData;
-        }
-        if((timeStamp - 2400) > time[graphEntries - 1]) {
-            qDebug() << "Timestamp: " << timeStamp << "Invalid timestamp: too big\n";
-            emit flushRadio();
-            free(data);
-            return;
-            //qDebug() << "Bad data\n";
-        }
-        if(dubiousData == NULL) {
-            //If previous data was fine, check if current data is possibly corrupt.
-            //If it is, then assign pointer to data and move to next piece of data
-            //to compare it to by returning
-            if(abs(timeStamp - time[graphEntries - 1]) > 1) {
-                //qDebug() << "Possibly corrupt data\n";
-                dubiousData = data;
-                return;
-            }
-        }
-        else {
-            //If the previous piece of data is possibly corrupted perform the same
-            //test with the newest piece of data
-            double dubiousTimeStamp = ((dubiousData->at(0) - initSecond) + 60*(dubiousData->at(21) - initMinute) + 3600*(dubiousData->at(22) - initHour) + 86400*(dubiousData->at(23) - initDay));
-            //qDebug() << "Possibly corrupt data\n";
-            if(abs(timeStamp - dubiousTimeStamp) > .5) {
-                //Free previous piece of data and perform corruption test on piece of new data
-                qDebug() << dubiousTimeStamp << " " << timeStamp << "\n";
-                free(dubiousData);
-                dubiousData = NULL;
-                if(abs(timeStamp  - time[graphEntries - 1]) > 1) {
-                    dubiousData = data;
-                    return;
-                }
-            }
-            else if(timeStamp == dubiousTimeStamp) {
-                //If the exact same double is sent twice in a row assume
-                //it is corrupted because that should never happen and is likely
-                //an error and both pieces of data are corrupted
-                qDebug() << "Same timestamp\n";
-                free(dubiousData);
-                free(data);
-                dubiousData = NULL;
-                return;
-            }
-            else {
-                //If the previous piece of data is found to not be corrupted
-                //add it to the main data vector and free it
-                /*
-                for(int i = 0; i < 21; i++) {
-                    qDebug() << dubiousData->at(i) << "\n";
-                }
-                */
-                //qDebug() << (time.length() - graphEntries);
-                //qDebug() << "\n";
 
-                time[graphEntries]              = dubiousTimeStamp;
-                latitude[graphEntries]          = dubiousData->at(1);
-                longitude[graphEntries]         = dubiousData->at(2);
-                gpsAltitude[graphEntries]       = dubiousData->at(3);
-                gpsSpeed[graphEntries]          = dubiousData->at(4);
-                xAcceleration[graphEntries]     = dubiousData->at(5);
-                yAcceleration[graphEntries]     = dubiousData->at(6);
-                zAcceleration[graphEntries]     = dubiousData->at(7);
-                xOrientation[graphEntries]      = dubiousData->at(8);
-                yOrientation[graphEntries]      = dubiousData->at(9);
-                zOrientation[graphEntries]      = dubiousData->at(10);
-                xAngularVelocity[graphEntries]  = dubiousData->at(11);
-                yAngularVelocity[graphEntries]  = dubiousData->at(12);
-                zAngularVelocity[graphEntries]  = dubiousData->at(13);
-                xMagneticField[graphEntries]    = dubiousData->at(14);
-                yMagneticField[graphEntries]    = dubiousData->at(15);
-                zMagneticField[graphEntries]    = dubiousData->at(16);
-                temperature[graphEntries]       = dubiousData->at(17);
-                pressure[graphEntries]          = dubiousData->at(18);
-                altimeterAltitude[graphEntries] = dubiousData->at(19);
-                humidity[graphEntries]          = dubiousData->at(20);
-                //qDebug() << "Free data\n";
-                free(dubiousData);
-                dubiousData = NULL;
-                //qDebug() << "Data added\n";
-                //Add the previous piece of data to the graphs
-                timeGraph->addData((*key)[graphEntries], time[graphEntries]);
-                latitudeGraph->addData((*key)[graphEntries], latitude[graphEntries]);
-                longitudeGraph->addData((*key)[graphEntries], longitude[graphEntries]);
-                gpsAltitudeGraph->addData((*key)[graphEntries], gpsAltitude[graphEntries]);
-                gpsSpeedGraph->addData((*key)[graphEntries], gpsSpeed[graphEntries]);
-                xAccelerationGraph->addData((*key)[graphEntries], xAcceleration[graphEntries]);
-                yAccelerationGraph->addData((*key)[graphEntries], yAcceleration[graphEntries]);
-                zAccelerationGraph->addData((*key)[graphEntries], zAcceleration[graphEntries]);
-                xOrientationGraph->addData((*key)[graphEntries], xOrientation[graphEntries]);
-                yOrientationGraph->addData((*key)[graphEntries], yOrientation[graphEntries]);
-                zOrientationGraph->addData((*key)[graphEntries], zOrientation[graphEntries]);
-                xAngularVelocityGraph->addData((*key)[graphEntries], xAngularVelocity[graphEntries]);
-                yAngularVelocityGraph->addData((*key)[graphEntries], yAngularVelocity[graphEntries]);
-                zAngularVelocityGraph->addData((*key)[graphEntries], zAngularVelocity[graphEntries]);
-                xMagneticFieldGraph->addData((*key)[graphEntries], xMagneticField[graphEntries]);
-                yMagneticFieldGraph->addData((*key)[graphEntries], yMagneticField[graphEntries]);
-                zMagneticFieldGraph->addData((*key)[graphEntries], zMagneticField[graphEntries]);
-                temperatureGraph->addData((*key)[graphEntries], temperature[graphEntries]);
-                pressureGraph->addData((*key)[graphEntries], pressure[graphEntries]);
-                altimeterAltitudeGraph->addData((*key)[graphEntries], altimeterAltitude[graphEntries]);
-                humidityGraph->addData((*key)[graphEntries], humidity[graphEntries]);
-
-                dedicatedXAccelerationGraph->addData(time[graphEntries], xAcceleration[graphEntries]);
-                dedicatedYAccelerationGraph->addData(time[graphEntries], yAcceleration[graphEntries]);
-                dedicatedZAccelerationGraph->addData(time[graphEntries], zAcceleration[graphEntries]);
-                dedicatedLongitudeGraph->addData(latitude[graphEntries], longitude[graphEntries]);
-                dedicatedXAngularVelocityGraph->addData(time[graphEntries], xAngularVelocity[graphEntries]);
-                dedicatedYAngularVelocityGraph->addData(time[graphEntries], yAngularVelocity[graphEntries]);
-                dedicatedZAngularVelocityGraph->addData(time[graphEntries], zAngularVelocity[graphEntries]);
-                dedicatedXOrientationGraph->addData(time[graphEntries], xOrientation[graphEntries]);
-                dedicatedYOrientationGraph->addData(time[graphEntries], yOrientation[graphEntries]);
-                dedicatedZOrientationGraph->addData(time[graphEntries], zOrientation[graphEntries]);
-                /*
-                if(spreadSheet->open(QFile::WriteOnly|QFile::Truncate)) {
-                    QTextStream output(spreadSheet);
-                    output << QString("\n") + QString::number(dubiousData->at(23)) + ":" + QString::number(dubiousData->at(22)) + ":" +
-                              QString::number(dubiousData->at(21)) + ":" + QString::number(dubiousData->at(0)) + QString("\t") +
-                              QString::number(latitude[graphEntries]) +
-                              QString("\t") + QString::number(longitude[graphEntries]) + QString("\t") + QString::number(gpsAltitude[graphEntries]) +
-                              QString("\t") + QString::number(gpsSpeed[graphEntries]) + QString("\t") + QString::number(xAcceleration[graphEntries]) +
-                              QString("\t") + QString::number(yAcceleration[graphEntries]) + QString("\t") + QString::number(zAcceleration[graphEntries]) +
-                              QString("\t") + QString::number(xOrientation[graphEntries]) + QString("\t") + QString::number(yOrientation[graphEntries]) +
-                              QString("\t") + QString::number(zOrientation[graphEntries]) + QString("\t") + QString::number(xAngularVelocity[graphEntries]) + \
-                              QString("\t") + QString::number(yAngularVelocity[graphEntries]) + QString("\t") +
-                              QString::number(zAngularVelocity[graphEntries]) + QString("\t") + QString::number(xMagneticField[graphEntries]) +
-                              QString("\t") + QString::number(yMagneticField[graphEntries]) + QString("\t") + QString::number(zMagneticField[graphEntries]) +
-                              QString("\t") + QString::number(temperature[graphEntries]) + QString("\t") + QString::number(pressure[graphEntries]) +
-                              QString("\t") + QString::number(altimeterAltitude[graphEntries]) + QString("\t") + QString::number(humidity[graphEntries]);
-                    spreadSheet->close();
-                }
-                */
-                velocity[0] += (time[graphEntries] - time[graphEntries - 1])*(xAcceleration[graphEntries - 1] + xAcceleration[graphEntries])/2;
-                velocity[1] += (time[graphEntries] - time[graphEntries - 1])*(yAcceleration[graphEntries - 1] + yAcceleration[graphEntries])/2;
-                velocity[2] += (time[graphEntries] - time[graphEntries - 1])*(zAcceleration[graphEntries - 1] + zAcceleration[graphEntries])/2;
-                ++graphEntries;
-
-            }
-        }
     }
     else {
         initSecond = data->at(0);
@@ -670,28 +522,8 @@ void MainWindow::updateData(QList<double>* data) {
     //Free the data after it's added to the main vector to avoid memory leaks
     free(data);
     //Add the new data to the graphs
-    timeGraph->addData((*key)[graphEntries], time[graphEntries]);
-    latitudeGraph->addData((*key)[graphEntries], latitude[graphEntries]);
-    longitudeGraph->addData((*key)[graphEntries], longitude[graphEntries]);
-    gpsAltitudeGraph->addData((*key)[graphEntries], gpsAltitude[graphEntries]);
-    gpsSpeedGraph->addData((*key)[graphEntries], gpsSpeed[graphEntries]);
-    xAccelerationGraph->addData((*key)[graphEntries], xAcceleration[graphEntries]);
-    yAccelerationGraph->addData((*key)[graphEntries], yAcceleration[graphEntries]);
-    zAccelerationGraph->addData((*key)[graphEntries], zAcceleration[graphEntries]);
-    xOrientationGraph->addData((*key)[graphEntries], xOrientation[graphEntries]);
-    yOrientationGraph->addData((*key)[graphEntries], yOrientation[graphEntries]);
-    zOrientationGraph->addData((*key)[graphEntries], zOrientation[graphEntries]);
-    xAngularVelocityGraph->addData((*key)[graphEntries], xAngularVelocity[graphEntries]);
-    yAngularVelocityGraph->addData((*key)[graphEntries], yAngularVelocity[graphEntries]);
-    zAngularVelocityGraph->addData((*key)[graphEntries], zAngularVelocity[graphEntries]);
-    xMagneticFieldGraph->addData((*key)[graphEntries], xMagneticField[graphEntries]);
-    yMagneticFieldGraph->addData((*key)[graphEntries], yMagneticField[graphEntries]);
-    zMagneticFieldGraph->addData((*key)[graphEntries], zMagneticField[graphEntries]);
-    temperatureGraph->addData((*key)[graphEntries], temperature[graphEntries]);
-    pressureGraph->addData((*key)[graphEntries], pressure[graphEntries]);
-    altimeterAltitudeGraph->addData((*key)[graphEntries], altimeterAltitude[graphEntries]);
-    humidityGraph->addData((*key)[graphEntries], humidity[graphEntries]);
 
+    /*
     dedicatedXAccelerationGraph->addData(time[graphEntries], xAcceleration[graphEntries]);
     dedicatedYAccelerationGraph->addData(time[graphEntries], yAcceleration[graphEntries]);
     dedicatedZAccelerationGraph->addData(time[graphEntries], zAcceleration[graphEntries]);
@@ -702,33 +534,28 @@ void MainWindow::updateData(QList<double>* data) {
     dedicatedXOrientationGraph->addData(time[graphEntries], xOrientation[graphEntries]);
     dedicatedYOrientationGraph->addData(time[graphEntries], yOrientation[graphEntries]);
     dedicatedZOrientationGraph->addData(time[graphEntries], zOrientation[graphEntries]);
+    */
 
+    /*
     if(graphEntries > 1) {
         velocity[0] += (time[graphEntries] - time[graphEntries - 1])*(xAcceleration[graphEntries - 1] + xAcceleration[graphEntries])/2;
         velocity[1] += (time[graphEntries] - time[graphEntries - 1])*(yAcceleration[graphEntries - 1] + yAcceleration[graphEntries])/2;
         velocity[2] += (time[graphEntries] - time[graphEntries - 1])*(zAcceleration[graphEntries - 1] + zAcceleration[graphEntries])/2;
         QString speedString = ("Speed: " + QString::number(sqrt(pow(velocity[0],2) + pow(velocity[1],2) + pow(velocity[2],2))));
         //ui->Speed->setText(speedString);
-    }
+    }*/
 
-    QString latitudeLongitudeString = "Latitude:\n" + QString::number(latitude[graphEntries]) + "\nLongitude:\n" + QString::number(longitude[graphEntries]);
-    ui->LatLonText->setText(latitudeLongitudeString);
+    //QString latitudeLongitudeString = "Latitude:\n" + QString::number(latitude[graphEntries]) + "\nLongitude:\n" + QString::number(longitude[graphEntries]);
+    //ui->LatLonText->setText(latitudeLongitudeString);
     //ui->Acceleration->replot();
 
     if(spreadSheet->open(QFile::WriteOnly|QFile::Append)) {
         QTextStream output(spreadSheet);
-        output << QString("\n2019:06:") + QString::number(data->at(23)) + ":" + QString::number(data->at(22)) + ":" + QString::number(data->at(21)) +
-                  ":" + QString::number(data->at(0)) + QString(",") + QString::number(latitude[graphEntries]) +
-                  QString(",") + QString::number(longitude[graphEntries]) + QString(",") + QString::number(gpsAltitude[graphEntries]) +
-                  QString(",") + QString::number(gpsSpeed[graphEntries]) + QString(",") + QString::number(xAcceleration[graphEntries]) +
-                  QString(",") + QString::number(yAcceleration[graphEntries]) + QString(",") + QString::number(zAcceleration[graphEntries]) +
-                  QString(",") + QString::number(xOrientation[graphEntries]) + QString(",") + QString::number(yOrientation[graphEntries]) +
-                  QString(",") + QString::number(zOrientation[graphEntries]) + QString(",") + QString::number(xAngularVelocity[graphEntries]) +
-                  QString(",") + QString::number(yAngularVelocity[graphEntries]) + QString(",") +
-                  QString::number(zAngularVelocity[graphEntries]) + QString(",") + QString::number(xMagneticField[graphEntries]) +
-                  QString(",") + QString::number(yMagneticField[graphEntries]) + QString(",") + QString::number(zMagneticField[graphEntries]) +
-                  QString(",") + QString::number(temperature[graphEntries]) + QString(",") + QString::number(pressure[graphEntries]) +
-                  QString(",") + QString::number(altimeterAltitude[graphEntries]) + QString(",") + QString::number(humidity[graphEntries]);
+
+        for (int i = 0; i < graphs.size(); i++) {
+            output << QString::number(graphs[i].data.last()) + QString(",");
+        }
+
         spreadSheet->close();
     }
 
@@ -743,9 +570,6 @@ void MainWindow::updateData(QList<double>* data) {
     //updatePermanentGraphs();
     //Check how close the used data is to the maximum data the vector can hold
     //and increase the vector size as needed
-    if(time.length()*0.75 < graphEntries) {
-        updateGraphVectorSize();
-    }
 }
 
 void MainWindow::updateGraph() {
@@ -898,7 +722,7 @@ void MainWindow::on_comPorts_currentIndexChanged(const QString &arg1) {
 }
 
 void MainWindow::updatePermanentGraphs() {
-    int index = findTimeIndex(time[graphEntries - 1] - 15);
+    int index = findTimeIndex(graphs[0].data[graphEntries - 1] - 15);
     //qDebug() << "Index: " << index << " " << "Graph entries minus one: " << (graphEntries - 1) << "\n";
     if(index == -1) {
         ui->Acceleration->xAxis->rescale(true);
@@ -909,12 +733,12 @@ void MainWindow::updatePermanentGraphs() {
         ui->Orientation->yAxis->rescale(true);
     }
     else {
-        ui->Acceleration->xAxis->setRange(time[index], time[graphEntries - 1]);
-        scaleValueAxisInKey(time[index], time[graphEntries - 1], ui->Acceleration);
-        ui->AngularVelocity->xAxis->setRange(time[index], time[graphEntries - 1]);
-        scaleValueAxisInKey(time[index], time[graphEntries - 1], ui->AngularVelocity);
-        ui->Orientation->xAxis->setRange(time[index], time[graphEntries - 1]);
-        scaleValueAxisInKey(time[index], time[graphEntries - 1], ui->Orientation);
+        ui->Acceleration->xAxis->setRange(graphs[0].data[index], graphs[0].data[graphEntries - 1]);
+        scaleValueAxisInKey(graphs[0].data[index], graphs[0].data[graphEntries - 1], ui->Acceleration);
+        ui->AngularVelocity->xAxis->setRange(graphs[0].data[index], graphs[0].data[graphEntries - 1]);
+        scaleValueAxisInKey(graphs[0].data[index], graphs[0].data[graphEntries - 1], ui->AngularVelocity);
+        ui->Orientation->xAxis->setRange(graphs[0].data[index], graphs[0].data[graphEntries - 1]);
+        scaleValueAxisInKey(graphs[0].data[index], graphs[0].data[graphEntries - 1], ui->Orientation);
     }
     ui->LatitudeLongitude->xAxis->rescale(true);
     ui->LatitudeLongitude->yAxis->rescale(true);
