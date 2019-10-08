@@ -73,111 +73,6 @@
       <height>22</height>
      </rect>
     </property>
-    <item>
-     <property name="text">
-      <string>Time</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Latitude</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Longitude</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>GPS Altitude</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>GPS Speed</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Acceleration</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Acceleration</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Acceleration</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Orientation</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Orientation</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Orientation</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Angular Velocity</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Angular Velocity</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Angular Velocity</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Magnetic Field</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Magnetic Field</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Magnetic Field</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Temperature</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Pressure</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Altimeter Altitude</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Humidity</string>
-     </property>
-    </item>
    </widget>
    <widget class="QGroupBox" name="rangeSelect">
     <property name="geometry">
@@ -542,237 +437,6 @@ p, li { white-space: pre-wrap; }
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
-    <item>
-     <property name="text">
-      <string>Time</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Latitude</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Longitude</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>GPS Altitude</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>GPS Speed</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Acceleration</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsDragEnabled|ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Acceleration</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Acceleration</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Orientation</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Orientation</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Orientation</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Angular Velocity</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Angular Velocity</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Angular Velocity</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>X Magnetic Field</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Y Magnetic Field</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Z Magnetic Field</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Temperature</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Pressure</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Altimeter Altitude</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Humidity</string>
-     </property>
-     <property name="checkState">
-      <enum>Unchecked</enum>
-     </property>
-     <property name="flags">
-      <set>ItemIsUserCheckable|ItemIsEnabled</set>
-     </property>
-    </item>
    </widget>
    <widget class="QPushButton" name="sleepButton">
     <property name="geometry">
@@ -939,8 +603,15 @@ p, li { white-space: pre-wrap; }
      <string>File</string>
     </property>
     <addaction name="actionImport_2"/>
+    <addaction name="actionLoad_Config"/>
+   </widget>
+   <widget class="QMenu" name="menuOpen_GPS">
+    <property name="title">
+     <string>Open GPS</string>
+    </property>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuOpen_GPS"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -959,6 +630,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionImport_2">
    <property name="text">
     <string>Import</string>
+   </property>
+  </action>
+  <action name="actionLoad_Config">
+   <property name="text">
+    <string>Load Config</string>
    </property>
   </action>
  </widget>

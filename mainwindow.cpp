@@ -161,9 +161,25 @@ void MainWindow::initializeMainPlot() {
 
 }
 
+void MainWindow::initializeEnableGraphs() {
+    for (int i = 0; i < graphs.size(); i++) {
+        QListWidgetItem *listItem = new QListWidgetItem(graphs[i].name, ui->enableGraphs);
+        listItem->setCheckState(Qt::Unchecked);
+        ui->enableGraphs->addItem(listItem);
+    }
+}
+
+void MainWindow::initializeHorizontalAxis() {
+    for (int i = 0; i < graphs.size(); i++) {
+        ui->horizontalAxis->addItem(graphs[i].name);
+    }
+}
+
 void MainWindow::initializeDataGraphs(QJsonArray graphParams) {
+    if (graphParams.size() == 0) return;
+
     for (int i = 0; i < graphParams.size(); i++) {
-        QJsonObject params = graphParams.at(i).toObject();
+        QJsonObject params = graphParams[i].toObject();
         DataGraph graph;
 
         graph.name = params.find("name")->toString();
@@ -831,5 +847,27 @@ void MainWindow::on_actionImport_2_triggered() {
             }
             qDebug() << spreadSheetData; //Header length is 295
 
+    }
+}
+
+void MainWindow::on_actionLoad_Config_triggered() {
+    QString filename = QFileDialog::getOpenFileName(this,
+            tr("Open Configuration File"), "",
+            tr("Json (*.json);;All Files (*)"));
+
+    if (!filename.isEmpty()) {
+        QFile file(filename);
+
+        file.open(QIODevice::ReadOnly);
+        QString contents = file.readAll();
+        file.close();
+
+        QJsonDocument json = QJsonDocument::fromJson(contents.toUtf8());
+
+        experimentName = json["ExperimentName"].toString();
+
+        initializeDataGraphs(json["DataGraphs"].toArray());
+        initializeEnableGraphs();
+        initializeHorizontalAxis();
     }
 }

@@ -1,0 +1,20 @@
+{
+	"ExperimentName": "example",
+	"DataGraphs": [
+		{
+			"index": 0,
+			"name": "Time",
+			"color": [255, 255, 255]
+		},
+		{
+			"index": 1,
+			"name": "Latitude",
+			"color": [255, 255, 255]
+		},
+		{
+			"index": 2,
+			"name": "Longitude",
+			"color": [255, 255, 255]
+		}
+	]
+}

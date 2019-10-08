@@ -33,62 +33,34 @@ public slots:
 private slots:
 
     void on_horizontalAxis_activated(int index);
-
     void on_autorange_toggled(bool checked);
-
     void on_manualSize_toggled(bool checked);
-
     void on_xMin_valueChanged();
-
     void on_yMin_valueChanged();
-
     void on_xMax_valueChanged();
-
     void on_yMax_valueChanged();
-
     void autoSize();
-
     void manualSize();
-
-    //void graphRecent();
-
     void updateGraph();
-
     void on_parametric_toggled(bool checked);
-
     void on_parametricMin_valueChanged();
-
     void on_parametricMax_valueChanged();
-
     void parametricRange();
-
     void scaleValueAxisInKey(double minKey, double maxKey, QCustomPlot *targetPlot, double underScale = 1.10, double overScale = 1.10);
-
     void updateGraphVectorSize();
-
     void on_recent_toggled(bool checked);
-
     void recentSize();
-
     void setNewMeanDeviation();
-
     int findTimeIndex(double targetTime);
-
     void on_recentTime_valueChanged();
-
     void on_enableGraphs_itemChanged(QListWidgetItem *item);
-
     void on_sleepButton_clicked();
-
     void on_stopButton_clicked();
-
     void on_comPorts_currentIndexChanged(const QString &arg1);
-
     void updatePermanentGraphs();
-
     void on_pushButton_clicked();
-
     void on_actionImport_2_triggered();
+    void on_actionLoad_Config_triggered();
 
 signals:
     void sendMessage(QByteArray *message);
@@ -100,6 +72,7 @@ signals:
     void changeStopState(bool state);
 
     void flushRadio();
+
 private:
     Ui::MainWindow *ui;
 
@@ -119,6 +92,8 @@ private:
     */
 
     void initializeMainPlot();
+    void initializeEnableGraphs();
+    void initializeHorizontalAxis();
     void initializeDataGraphs(QJsonArray graphs);
 
     QCustomPlot *plot;
@@ -126,6 +101,9 @@ private:
 
     QVector<DataGraph> graphs;
     QVector<double>* key;
+
+    QString experimentName;
+
 
     long int graphEntries = 0;
     DataProcessing *radioProcesser = new DataProcessing();
