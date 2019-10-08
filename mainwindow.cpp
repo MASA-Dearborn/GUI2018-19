@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("MASA Dashboard 2020");
+
     radioProcesser->moveToThread(radioThread);
     QDateTime setTime = QDateTime();
     //QDateTime current = QDateTime::currentDateTime();
@@ -162,6 +164,8 @@ void MainWindow::initializeMainPlot() {
 }
 
 void MainWindow::initializeEnableGraphs() {
+    ui->enableGraphs->clear();
+
     for (int i = 0; i < graphs.size(); i++) {
         QListWidgetItem *listItem = new QListWidgetItem(graphs[i].name, ui->enableGraphs);
         listItem->setCheckState(Qt::Unchecked);
@@ -170,6 +174,8 @@ void MainWindow::initializeEnableGraphs() {
 }
 
 void MainWindow::initializeHorizontalAxis() {
+    ui->horizontalAxis->clear();
+
     for (int i = 0; i < graphs.size(); i++) {
         ui->horizontalAxis->addItem(graphs[i].name);
     }
@@ -177,6 +183,11 @@ void MainWindow::initializeHorizontalAxis() {
 
 void MainWindow::initializeDataGraphs(QJsonArray graphParams) {
     if (graphParams.size() == 0) return;
+
+    for (int i = 0; i < graphs.size(); i++) {
+        graphs[i].curve->removeFromLegend();
+    }
+    graphs.clear();
 
     for (int i = 0; i < graphParams.size(); i++) {
         QJsonObject params = graphParams[i].toObject();

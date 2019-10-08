@@ -4,17 +4,22 @@
 		{
 			"index": 0,
 			"name": "Time",
-			"color": [255, 255, 255]
+			"color": [0, 255, 0]
 		},
 		{
 			"index": 1,
 			"name": "Latitude",
-			"color": [255, 255, 255]
+			"color": [255, 255, 0]
 		},
 		{
 			"index": 2,
 			"name": "Longitude",
-			"color": [255, 255, 255]
+			"color": [0, 255, 255]
+		},
+		{
+			"index": 3,
+			"name": "Temperature",
+			"color": [255, 0, 255]
 		}
 	]
 }
