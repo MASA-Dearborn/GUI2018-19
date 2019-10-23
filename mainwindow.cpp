@@ -866,19 +866,19 @@ void MainWindow::on_actionLoad_Config_triggered() {
             tr("Open Configuration File"), "",
             tr("Json (*.json);;All Files (*)"));
 
-    if (!filename.isEmpty()) {
-        QFile file(filename);
+    if (filename.isEmpty()) return;
 
-        file.open(QIODevice::ReadOnly);
-        QString contents = file.readAll();
-        file.close();
+    QFile file(filename);
 
-        QJsonDocument json = QJsonDocument::fromJson(contents.toUtf8());
+    file.open(QIODevice::ReadOnly);
+    QString contents = file.readAll();
+    file.close();
 
-        experimentName = json["ExperimentName"].toString();
+    QJsonDocument json = QJsonDocument::fromJson(contents.toUtf8());
 
-        initializeDataGraphs(json["DataGraphs"].toArray());
-        initializeEnableGraphs();
-        initializeHorizontalAxis();
-    }
+    experimentName = json["ExperimentName"].toString();
+
+    initializeDataGraphs(json["DataGraphs"].toArray());
+    initializeEnableGraphs();
+    initializeHorizontalAxis();
 }
