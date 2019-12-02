@@ -21,7 +21,7 @@ public slots:
     void changeStopState(bool state);
 
     void flush();
-private slots:
+protected slots:
     void enumeratePorts();
 
     void radioUnplugged(QSerialPort::SerialPortError error);
@@ -31,7 +31,8 @@ signals:
     void updateGraphData(QList<double>* data);
 
     void addPort(QList<QString> *names);
-private:
+
+protected:
     QSerialPortInfo radioInfo;
     QSerialPort *radio;
     QByteArray bufferedData;

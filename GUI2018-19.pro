@@ -28,12 +28,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     qcustomplot.cpp \
-    dataprocessing.cpp
+    dataprocessing.cpp \
+    eggfinderreader.cpp \
+    telegpsreader.cpp
 
 HEADERS += \
         mainwindow.h \
     qcustomplot.h \
-    dataprocessing.h
+    dataprocessing.h \
+    eggfinderreader.h \
+    telegpsreader.h
 
 FORMS += \
         mainwindow.ui
